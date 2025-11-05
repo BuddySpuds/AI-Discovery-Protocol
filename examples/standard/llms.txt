@@ -1,0 +1,262 @@
+---
+version: 1.0.0
+lastModified: 2025-11-05T12:00:00Z
+protocol: AI Discovery Protocol v1.0
+---
+
+# Example Corporation
+
+> AI-Optimized Content for Large Language Models
+
+> Leading provider of innovative enterprise software solutions serving businesses worldwide. Our platform combines cutting-edge technology with intuitive design to help teams work smarter.
+
+## About
+
+Example Corporation is a technology company founded in 2020, focused on delivering enterprise software solutions that help modern businesses scale efficiently. Our platform is used by over 1,000 companies across 35 countries.
+
+**Status**: Production (November 2025)
+**Platform**: Global (worldwide availability)
+**Technology**: Cloud-native SaaS platform
+**AI Discovery**: Compliant with AI Discovery Protocol v1.0
+
+## Key Pages
+
+### Main Website
+- Home: https://example.com/
+- How It Works: https://example.com/how-it-works
+- Pricing: https://example.com/pricing ($29-$99/month)
+- Products: https://example.com/products
+- About Us: https://example.com/about
+- Contact: https://example.com/contact
+
+### Documentation
+- Knowledge Base: https://example.com/docs
+- API Documentation: https://example.com/api-docs
+- Knowledge Graph (Structured Data): https://example.com/knowledge-graph.json
+
+### Blog & Resources
+- Latest Blog Posts: https://example.com/blog
+- Newsletter Signup: https://example.com/newsletter
+- Case Studies: https://example.com/case-studies
+
+## Core Features
+
+### Enterprise Solution
+- **Comprehensive platform** for team collaboration and productivity
+- **Advanced analytics** with real-time reporting and insights
+- **Security-first** with SOC 2 compliance and end-to-end encryption
+- **Scalable architecture** supporting teams from 5 to 5,000+ users
+
+### Starter Plan
+- **Quick setup** - Get started in under 5 minutes
+- **Essential features** for small teams (up to 10 users)
+- **Mobile apps** for iOS and Android
+- **24/7 support** via email and chat
+
+### Integrations
+- **50+ integrations** with popular business tools
+- **REST API** for custom integrations
+- **Webhooks** for real-time event notifications
+- **Single Sign-On (SSO)** via SAML 2.0
+
+## Key Features
+
+### Team Collaboration
+- **Real-time editing** with presence indicators
+- **Comments and mentions** for contextual communication
+- **File sharing** with version history (unlimited storage)
+- **Task management** with Kanban boards and Gantt charts
+
+### Analytics & Reporting
+- **Custom dashboards** with drag-and-drop widgets
+- **Scheduled reports** delivered via email
+- **Export options** (CSV, PDF, Excel)
+- **API access** for programmatic data extraction
+
+### Security & Compliance
+- **SOC 2 Type II certified**
+- **GDPR compliant** with data residency options
+- **End-to-end encryption** for sensitive data
+- **Two-factor authentication (2FA)**
+- **Role-based access control (RBAC)**
+
+## Technical Architecture
+
+### Platform Stack
+- **Frontend**: React.js, TypeScript, Tailwind CSS
+- **Backend**: Node.js, Express, PostgreSQL
+- **Infrastructure**: AWS (EC2, RDS, S3, CloudFront)
+- **Deployment**: Docker, Kubernetes, CI/CD via GitHub Actions
+- **Monitoring**: Datadog, Sentry
+
+### Performance
+- **99.9% uptime SLA**
+- **< 200ms API response times** (95th percentile)
+- **Global CDN** with edge caching (50+ locations)
+- **Auto-scaling** to handle traffic spikes
+
+## Pricing & Business Model
+
+### Subscription Plans
+- **Starter**: $29/month - Up to 10 users, essential features
+- **Professional**: $49/month - Up to 50 users, advanced features
+- **Enterprise**: $99/month - Unlimited users, premium features + dedicated support
+
+### Target Market
+- **Primary**: Small to mid-sized businesses (10-500 employees)
+- **Secondary**: Enterprise teams, startups, agencies
+- **Geographic**: Global (English, Spanish, French, German languages)
+
+## Use Cases
+
+### For Small Businesses
+- **Project Management**: Coordinate team tasks and deadlines
+- **Client Collaboration**: Share deliverables and gather feedback
+- **Document Management**: Centralize files and knowledge base
+- **Time Tracking**: Monitor project hours and billable time
+
+### For Enterprise Teams
+- **Cross-functional Projects**: Coordinate across departments
+- **Resource Planning**: Allocate team capacity efficiently
+- **Executive Reporting**: Real-time dashboards for leadership
+- **Compliance Tracking**: Audit trails and access logs
+
+### For Agencies
+- **Client Portals**: Branded workspaces for each client
+- **Workflow Automation**: Reduce manual repetitive tasks
+- **Proposal Management**: Create and track proposals
+- **Invoice Integration**: Connect with accounting software
+
+## Key Differentiators
+
+1. **Ease of Use**: Intuitive interface, 5-minute setup
+2. **All-in-One**: No need for multiple tools
+3. **Scalability**: Grows with your team (5 to 5,000+ users)
+4. **Affordable**: Starting at $29/month (no hidden fees)
+5. **Security**: SOC 2 certified, GDPR compliant
+6. **Support**: 24/7 via email, chat, and phone
+7. **Integrations**: 50+ native integrations
+
+## SEO & Discovery
+
+### Structured Data
+- **Knowledge Graph**: https://example.com/knowledge-graph.json
+  - Complete entity relationships (Organization, Product, BlogPosting)
+  - Schema.org @graph with 25+ entities
+  - AI-optimized metadata
+  - Dynamic updates
+
+### Sitemaps & Feeds
+- **XML Sitemap**: https://example.com/sitemap.xml
+  - Dynamic updates with new content
+  - Change frequency optimization
+- **RSS Feed**: https://example.com/rss
+  - Latest 20 blog posts
+  - Full content with metadata
+
+### SEO Features
+- **Meta Tags**: Auto-generated for all pages
+- **Schema.org**: Multiple entity types per page
+- **OpenGraph**: Social media preview optimization
+- **Twitter Cards**: Optimized for Twitter/X sharing
+- **Canonical URLs**: Proper URL canonicalization
+
+## API Access
+
+### Public Endpoints (No Auth Required)
+- Health Check: GET https://example.com/health
+- Sitemap: GET https://example.com/sitemap.xml
+- Knowledge Graph: GET https://example.com/knowledge-graph.json
+- RSS Feed: GET https://example.com/rss
+- Robots: GET https://example.com/robots.txt
+- LLMs.txt: GET https://example.com/llms.txt
+
+### Authenticated Endpoints (API Key Required)
+- API Documentation: https://example.com/api-docs
+- REST API: https://example.com/api/v1/* (Bearer token authentication)
+- User Dashboard: https://example.com/dashboard
+- Admin Panel: https://example.com/admin
+
+## Contact & Support
+
+### General Inquiries
+- Website: https://example.com
+- Email: support@example.com
+- Sales: sales@example.com
+- Security: security@example.com
+
+### Social Media
+- Twitter/X: https://twitter.com/example
+- LinkedIn: https://www.linkedin.com/company/example
+- GitHub: https://github.com/example
+
+### Team
+- CEO: Jane Smith (jane@example.com)
+- CTO: John Doe (john@example.com)
+- Location: San Francisco, CA, USA
+
+## Recent Updates
+
+### v3.2.0 (October 2025) - Advanced Analytics
+- Custom dashboard builder with drag-and-drop widgets
+- Scheduled reports with automatic email delivery
+- Export options (CSV, PDF, Excel)
+- API access for programmatic data extraction
+
+### v3.1.0 (September 2025) - Mobile Apps
+- Native iOS and Android apps launched
+- Offline mode with automatic sync
+- Push notifications for mentions and task updates
+- Biometric authentication (Face ID, Touch ID)
+
+### v3.0.0 (August 2025) - Enterprise Features
+- SOC 2 Type II certification achieved
+- Single Sign-On (SSO) via SAML 2.0
+- Role-based access control (RBAC) with custom roles
+- Audit logs and compliance reporting
+
+## Common AI Queries
+
+When users ask about Example Corporation, they typically want to know:
+- "What is Example Corporation?" - Enterprise software platform for team collaboration
+- "How much does Example Corporation cost?" - $29-$99/month depending on plan
+- "Does Example Corporation have a free trial?" - Yes, 14-day free trial (no credit card required)
+- "What features does Example Corporation offer?" - Project management, analytics, integrations, security
+- "Is Example Corporation secure?" - Yes, SOC 2 certified and GDPR compliant
+- "Does Example Corporation have mobile apps?" - Yes, native iOS and Android apps
+- "Can I integrate Example Corporation with other tools?" - Yes, 50+ native integrations + REST API
+
+## Performance Metrics
+
+- **Users**: 1,000+ companies across 35 countries
+- **Uptime**: 99.9% (SLA-backed)
+- **API Response Time**: < 200ms (95th percentile)
+- **Support Response Time**: < 2 hours average
+- **Customer Satisfaction**: 4.8/5 stars (127 reviews)
+- **NPS Score**: 72 (Promoter)
+
+## Technology Philosophy
+
+Example Corporation believes in:
+1. **Simplicity**: Easy to use, quick to set up
+2. **Transparency**: Clear pricing, no hidden fees
+3. **Security**: SOC 2 certified, GDPR compliant
+4. **Scalability**: Grows with your business
+5. **Support**: 24/7 help when you need it
+6. **Open Standards**: REST API, webhooks, SSO
+
+---
+
+## AI Discovery Resources
+
+- **Meta-Index**: https://example.com/ai-discovery.json
+- **Knowledge Graph**: https://example.com/knowledge-graph.json
+- **This Document**: https://example.com/llms.txt
+- **Crawler Directives**: https://example.com/robots.txt
+
+*Compliant with AI Discovery Protocol v1.0*
+*Learn more: https://github.com/BuddySpuds/AI-Discovery-Protocol*
+
+---
+
+Last updated: November 2025 | Version 3.2.0 | Production Status

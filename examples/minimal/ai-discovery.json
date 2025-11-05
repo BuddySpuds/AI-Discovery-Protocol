@@ -1,0 +1,16 @@
+{
+  "$schema": "https://pressonify.ai/schemas/ai-discovery/v1.0.json",
+  "version": "1.0.0",
+  "generatedAt": "2025-11-05T12:00:00Z",
+  "website": {
+    "url": "https://example.com",
+    "name": "Example Corporation",
+    "description": "Brief description of your company (1-2 sentences)"
+  },
+  "endpoints": {
+    "knowledgeGraph": {
+      "url": "https://example.com/knowledge-graph.json",
+      "format": "application/ld+json"
+    }
+  }
+}

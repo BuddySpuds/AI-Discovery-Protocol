@@ -1,0 +1,133 @@
+# Robots.txt for Example Corporation (Advanced Implementation)
+
+# AI Discovery Protocol v1.0
+# Learn more: https://github.com/BuddySpuds/AI-Discovery-Protocol
+
+# AI-Optimized Endpoints
+Allow: /ai-discovery.json
+Allow: /knowledge-graph.json
+Allow: /llms.txt
+
+# Sitemaps
+Sitemap: https://example.com/sitemap.xml
+Sitemap: https://example.com/sitemap-images.xml
+Sitemap: https://example.com/sitemap-videos.xml
+
+# Standard crawler rules
+User-agent: *
+Allow: /
+
+# Crawl delay for respectful crawling
+Crawl-delay: 1
+
+# AI Crawlers - ChatGPT (OpenAI)
+User-agent: GPTBot
+Allow: /
+Allow: /ai-discovery.json
+Allow: /knowledge-graph.json
+Allow: /llms.txt
+Crawl-delay: 0.5
+
+# AI Crawlers - ChatGPT User Agent
+User-agent: ChatGPT-User
+Allow: /
+Allow: /ai-discovery.json
+Allow: /knowledge-graph.json
+Allow: /llms.txt
+Crawl-delay: 0.5
+
+# AI Crawlers - Claude (Anthropic)
+User-agent: Claude-Web
+Allow: /
+Allow: /ai-discovery.json
+Allow: /knowledge-graph.json
+Allow: /llms.txt
+Crawl-delay: 0.5
+
+# AI Crawlers - Perplexity
+User-agent: PerplexityBot
+Allow: /
+Allow: /ai-discovery.json
+Allow: /knowledge-graph.json
+Allow: /llms.txt
+Crawl-delay: 0.5
+
+# AI Crawlers - Google Extended (Gemini)
+User-agent: Google-Extended
+Allow: /
+Allow: /ai-discovery.json
+Allow: /knowledge-graph.json
+Allow: /llms.txt
+Crawl-delay: 0.5
+
+# AI Crawlers - Anthropic AI
+User-agent: anthropic-ai
+Allow: /
+Crawl-delay: 0.5
+
+# AI Crawlers - Cohere
+User-agent: cohere-ai
+Allow: /
+Crawl-delay: 0.5
+
+# RSS Feeds
+Allow: /feed
+Allow: /rss
+Allow: /atom
+
+# API Documentation (public)
+Allow: /api-docs
+Allow: /docs
+
+# Developer Resources
+Allow: /developers
+Allow: /integrations
+
+# Block admin and internal paths
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /api/internal/
+Disallow: /api/v1/internal/
+Disallow: /_next/
+Disallow: /static/admin/
+
+# Block search and filter pages (avoid duplicate content)
+Disallow: /*?search=
+Disallow: /*?filter=
+Disallow: /*?sort=
+
+# Block account and authentication pages
+Disallow: /login
+Disallow: /signup
+Disallow: /reset-password
+Disallow: /account/
+
+# Allow public-facing API endpoints
+Allow: /api/v1/public/
+
+# Block staging and test environments
+Disallow: /staging/
+Disallow: /test/
+Disallow: /dev/
+
+# Performance optimization - prevent crawling of assets
+Disallow: /*.js$
+Disallow: /*.css$
+Disallow: /*.woff$
+Disallow: /*.woff2$
+Disallow: /*.ttf$
+
+# Allow images (but not admin images)
+Allow: /images/
+Allow: /static/images/
+Disallow: /images/admin/
+Disallow: /static/admin/
+
+# Cache directives (informational)
+# Cache-Control: ai-discovery.json (max-age=3600)
+# Cache-Control: knowledge-graph.json (max-age=3600)
+# Cache-Control: llms.txt (max-age=86400)
+
+# Contact for crawl issues
+# Contact: ai-discovery@example.com
+# Security: security@example.com

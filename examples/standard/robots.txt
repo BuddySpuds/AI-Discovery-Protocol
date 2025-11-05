@@ -1,0 +1,48 @@
+# Robots.txt for Example Corporation
+
+# AI Discovery Protocol v1.0
+# Learn more: https://github.com/BuddySpuds/AI-Discovery-Protocol
+
+# AI-Optimized Endpoints
+Allow: /ai-discovery.json
+Allow: /knowledge-graph.json
+Allow: /llms.txt
+
+# Sitemap
+Sitemap: https://example.com/sitemap.xml
+
+# Standard crawler rules
+User-agent: *
+Allow: /
+
+# Crawl delay for respectful crawling
+Crawl-delay: 1
+
+# AI Crawlers (ChatGPT, Claude, Perplexity, Gemini)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# RSS Feed
+Allow: /feed
+Allow: /rss
+
+# Block admin and internal paths
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /api/internal/
+
+# Allow public documentation
+Allow: /docs
+Allow: /api-docs

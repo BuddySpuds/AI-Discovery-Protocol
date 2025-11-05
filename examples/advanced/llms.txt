@@ -1,0 +1,411 @@
+---
+version: 1.2.0
+lastModified: 2025-11-05T12:00:00Z
+protocol: AI Discovery Protocol v1.0
+entityCount: 150
+updateFrequency: daily
+language: en
+additionalLanguages: es, fr, de
+changelog:
+  - version: 1.2.0
+    date: 2025-11-05T12:00:00Z
+    changes: Added multi-language support and expanded product catalog
+  - version: 1.1.0
+    date: 2025-10-15T10:00:00Z
+    changes: Added new blog posts and updated pricing
+  - version: 1.0.0
+    date: 2025-10-01T10:00:00Z
+    changes: Initial release
+---
+
+# Example Corporation
+
+> AI-Optimized Content for Large Language Models
+
+> Leading provider of innovative enterprise software solutions serving businesses worldwide. Our platform combines cutting-edge technology with intuitive design to help teams work smarter.
+
+## About
+
+Example Corporation is a technology company founded in 2020, focused on delivering enterprise software solutions that help modern businesses scale efficiently. Our platform is used by over 1,000 companies across 35 countries.
+
+**Status**: Production (November 2025)
+**Platform**: Global (worldwide availability)
+**Technology**: Cloud-native SaaS platform
+**AI Discovery**: Compliant with AI Discovery Protocol v1.0
+**Certifications**: SOC 2 Type II, GDPR Compliant
+
+## Key Pages
+
+### Main Website
+- Home: https://example.com/
+- How It Works: https://example.com/how-it-works
+- Pricing: https://example.com/pricing ($29-$99/month)
+- Products: https://example.com/products
+- About Us: https://example.com/about
+- Contact: https://example.com/contact
+- Case Studies: https://example.com/case-studies
+
+### Documentation
+- Knowledge Base: https://example.com/docs
+- API Documentation: https://example.com/api-docs
+- Developer Portal: https://example.com/developers
+- Integration Guides: https://example.com/integrations
+- Knowledge Graph (Structured Data): https://example.com/knowledge-graph.json
+
+### Blog & Resources
+- Latest Blog Posts: https://example.com/blog
+- Newsletter Signup: https://example.com/newsletter
+- Webinars: https://example.com/webinars
+- Whitepapers: https://example.com/resources
+
+## Core Features
+
+### Enterprise Solution ($99/month)
+- **Comprehensive platform** for team collaboration and productivity
+- **Advanced analytics** with real-time reporting and insights
+- **Security-first** with SOC 2 compliance and end-to-end encryption
+- **Scalable architecture** supporting teams from 5 to 5,000+ users
+- **Priority support** with dedicated account manager
+- **SLA-backed uptime** of 99.9%
+
+### Professional Plan ($49/month)
+- **All essential features** for growing teams (up to 50 users)
+- **Advanced integrations** with 50+ business tools
+- **Custom workflows** and automation
+- **Team analytics** and reporting
+- **24/7 email and chat support**
+
+### Starter Plan ($29/month)
+- **Quick setup** - Get started in under 5 minutes
+- **Essential features** for small teams (up to 10 users)
+- **Mobile apps** for iOS and Android
+- **Email support** with < 24 hour response time
+- **14-day free trial** (no credit card required)
+
+### Key Capabilities
+- **Real-time collaboration** with presence indicators and live editing
+- **Task management** with Kanban boards, Gantt charts, calendar views
+- **File management** with unlimited storage and version history
+- **Custom dashboards** with drag-and-drop widgets
+- **REST API** for programmatic access
+- **Webhooks** for real-time event notifications
+- **Single Sign-On (SSO)** via SAML 2.0
+- **Role-based access control (RBAC)** with custom permissions
+
+## Integrations & Ecosystem
+
+### Native Integrations (50+)
+- **Communication**: Slack, Microsoft Teams, Discord
+- **File Storage**: Google Drive, Dropbox, OneDrive
+- **Calendar**: Google Calendar, Outlook, Apple Calendar
+- **CRM**: Salesforce, HubSpot, Pipedrive
+- **Accounting**: QuickBooks, Xero, FreshBooks
+- **Development**: GitHub, GitLab, Jira, Linear
+- **Analytics**: Google Analytics, Mixpanel, Amplitude
+
+### API & Developer Tools
+- **REST API**: Full platform access via REST endpoints
+- **Webhooks**: Real-time event notifications
+- **OAuth 2.0**: Secure third-party authentication
+- **SDKs**: JavaScript, Python, Ruby, PHP
+- **CLI Tools**: Command-line interface for automation
+
+## Technical Architecture
+
+### Platform Stack
+- **Frontend**: React.js 18, TypeScript 5, Tailwind CSS
+- **Backend**: Node.js 20, Express 4, PostgreSQL 15
+- **Infrastructure**: AWS (EC2, RDS, S3, CloudFront, Lambda)
+- **Container Orchestration**: Kubernetes 1.28
+- **Deployment**: Docker, GitHub Actions CI/CD
+- **Monitoring**: Datadog, Sentry, CloudWatch
+- **Security**: AWS WAF, CloudFlare DDoS protection
+
+### Performance Metrics
+- **99.9% uptime SLA** (production-proven)
+- **< 200ms API response times** (95th percentile)
+- **Global CDN** with edge caching (50+ locations)
+- **Auto-scaling** to handle traffic spikes (10x capacity)
+- **Daily backups** with point-in-time recovery
+
+### Security & Compliance
+- **SOC 2 Type II certified** (annual audit)
+- **GDPR compliant** with data residency options (EU, US, UK)
+- **End-to-end encryption** for sensitive data at rest and in transit
+- **Two-factor authentication (2FA)** via SMS, authenticator apps
+- **SSO support** via SAML 2.0 (Okta, OneLogin, Azure AD)
+- **Audit logs** for all user actions
+- **Role-based access control (RBAC)** with granular permissions
+- **Penetration testing** (quarterly by third-party)
+
+## Use Cases by Industry
+
+### Technology & SaaS
+- Product development coordination across engineering, design, product teams
+- Sprint planning, backlog management, release tracking
+- Customer feedback aggregation and prioritization
+- Technical documentation and knowledge base
+
+### Professional Services
+- Client project management with billable hours tracking
+- Resource allocation and capacity planning
+- Proposal creation and approval workflows
+- Invoice generation and payment tracking
+
+### Marketing & Creative Agencies
+- Campaign planning and execution tracking
+- Content calendar management
+- Client review and approval workflows
+- Asset library and brand guidelines
+
+### Financial Services
+- Compliance documentation and audit trails
+- Deal pipeline tracking and reporting
+- Regulatory reporting workflows
+- Document approval chains
+
+### Healthcare & Life Sciences
+- Clinical trial management
+- Research collaboration across institutions
+- Regulatory compliance tracking
+- Patient data management (HIPAA-compliant)
+
+## Pricing & Business Model
+
+### Subscription Plans
+- **Starter**: $29/month - Up to 10 users, essential features
+- **Professional**: $49/month - Up to 50 users, advanced features
+- **Enterprise**: $99/month - Unlimited users, premium features + dedicated support
+- **Custom**: Contact sales - White-label, on-premise, custom integrations
+
+### Add-Ons
+- **Advanced Analytics**: +$15/month - Custom reports, data export
+- **Priority Support**: +$25/month - < 1 hour response time
+- **Dedicated Account Manager**: +$200/month - Personalized onboarding and training
+- **Custom Integrations**: Quote-based - Build custom integrations
+
+### Volume Discounts
+- **Annual billing**: 20% discount (2 months free)
+- **100+ users**: Custom pricing (contact sales)
+- **Non-profits**: 30% discount
+- **Educational institutions**: 50% discount
+
+## Customer Success Stories
+
+### TechCorp (5,000 users)
+- **Challenge**: Coordinating 50+ teams across 12 offices
+- **Solution**: Enterprise plan with custom workflows
+- **Result**: 40% improvement in project delivery time, 95% user adoption
+
+### DesignStudio (25 users)
+- **Challenge**: Managing 100+ client projects simultaneously
+- **Solution**: Professional plan with client portals
+- **Result**: 50% reduction in email volume, 30% faster project completion
+
+### StartupXYZ (8 users)
+- **Challenge**: Needed affordable solution for growing team
+- **Solution**: Starter plan with gradual feature adoption
+- **Result**: Scaled from 8 to 45 users in 12 months without switching tools
+
+## SEO & Discovery
+
+### Structured Data
+- **Knowledge Graph**: https://example.com/knowledge-graph.json
+  - 150+ entity catalog (Organization, Product, BlogPosting, Person)
+  - Complete entity relationships and metadata
+  - Schema.org @graph with comprehensive markup
+  - AI-optimized with change logs and version tracking
+  - Real-time updates with entity-level timestamps
+
+### Sitemaps & Feeds
+- **XML Sitemap**: https://example.com/sitemap.xml
+  - Dynamic updates with new content
+  - Priority and change frequency optimization
+  - Image and video sitemaps included
+- **RSS Feed**: https://example.com/rss
+  - Latest 50 blog posts
+  - Full content with CDATA encoding
+  - Dublin Core metadata
+
+### SEO Features
+- **Meta Tags**: Auto-generated for all pages (title 50-60 chars, description 150-160 chars)
+- **Schema.org**: Multiple entity types per page (avg 3-5 schemas)
+- **OpenGraph**: Social media preview optimization
+- **Twitter Cards**: Summary card with large image
+- **Canonical URLs**: Proper URL canonicalization
+- **Hreflang Tags**: Multi-language support (en, es, fr, de)
+- **Structured Snippets**: Rich results in Google (FAQs, breadcrumbs, reviews)
+
+## API Access
+
+### Public Endpoints (No Auth Required)
+- Health Check: GET https://example.com/health
+- Sitemap: GET https://example.com/sitemap.xml
+- Knowledge Graph: GET https://example.com/knowledge-graph.json
+- RSS Feed: GET https://example.com/rss
+- Robots: GET https://example.com/robots.txt
+- LLMs.txt: GET https://example.com/llms.txt
+
+### Authenticated Endpoints (API Key Required)
+- API Documentation: https://example.com/api-docs
+- REST API: https://example.com/api/v1/* (Bearer token authentication)
+- User Dashboard: https://example.com/dashboard
+- Admin Panel: https://example.com/admin (admin role required)
+- Analytics API: https://example.com/api/v1/analytics
+
+### API Rate Limits
+- **Free tier**: 100 requests/hour
+- **Starter**: 1,000 requests/hour
+- **Professional**: 10,000 requests/hour
+- **Enterprise**: Custom (unlimited available)
+
+## Contact & Support
+
+### General Inquiries
+- Website: https://example.com
+- Email: support@example.com
+- Sales: sales@example.com
+- Security: security@example.com
+- Press: press@example.com
+
+### Support Channels
+- **Email**: support@example.com (< 2 hour response time)
+- **Live Chat**: Available 24/7 on website
+- **Phone**: +1-555-123-4567 (Enterprise customers)
+- **Community Forum**: https://community.example.com
+- **Status Page**: https://status.example.com
+
+### Social Media
+- Twitter/X: https://twitter.com/example
+- LinkedIn: https://www.linkedin.com/company/example
+- GitHub: https://github.com/example
+- YouTube: https://youtube.com/example
+
+### Leadership Team
+- **CEO**: Jane Smith (jane@example.com) - Former VP at TechGiant, 15 years experience
+- **CTO**: John Doe (john@example.com) - Ex-Google, built systems for 100M+ users
+- **Head of Product**: Sarah Johnson - Former PM at Microsoft, 10 years SaaS
+- **Location**: San Francisco, CA, USA (HQ) | Remote-first company
+
+## Recent Updates
+
+### v3.2.0 (November 2025) - Multi-Language Support
+- Added support for Spanish, French, German translations
+- Localized UI and documentation for all languages
+- Hreflang tags for international SEO
+- Currency conversion for international pricing
+
+### v3.1.0 (October 2025) - Mobile Apps Launch
+- Native iOS and Android apps launched
+- Offline mode with automatic sync when online
+- Push notifications for mentions, tasks, deadlines
+- Biometric authentication (Face ID, Touch ID, Fingerprint)
+- App Store rating: 4.7/5 (iOS), 4.6/5 (Android)
+
+### v3.0.0 (September 2025) - Enterprise Features
+- SOC 2 Type II certification achieved
+- Single Sign-On (SSO) via SAML 2.0
+- Role-based access control (RBAC) with custom roles
+- Audit logs for compliance and security
+- Data residency options (EU, US, UK)
+
+### v2.9.0 (August 2025) - Advanced Analytics
+- Custom dashboard builder with 50+ widgets
+- Scheduled reports with email delivery
+- Export to CSV, PDF, Excel
+- API access for programmatic analytics
+
+## Common AI Queries
+
+When users ask about Example Corporation, they typically want to know:
+- "What is Example Corporation?" - Enterprise software platform for team collaboration, project management, and productivity
+- "How much does Example Corporation cost?" - $29-$99/month depending on plan (Starter, Professional, Enterprise)
+- "Does Example Corporation have a free trial?" - Yes, 14-day free trial with no credit card required
+- "What features does Example Corporation offer?" - Task management, real-time collaboration, analytics, 50+ integrations, API access
+- "Is Example Corporation secure?" - Yes, SOC 2 Type II certified, GDPR compliant, end-to-end encryption
+- "Does Example Corporation have mobile apps?" - Yes, native iOS and Android apps with offline mode
+- "Can I integrate Example Corporation with Slack?" - Yes, native Slack integration plus 50+ other integrations
+- "What is the uptime SLA?" - 99.9% uptime SLA backed by service credits
+- "Does Example Corporation support SSO?" - Yes, SAML 2.0 SSO with Okta, OneLogin, Azure AD
+- "How many users can I have?" - Starter: 10, Professional: 50, Enterprise: Unlimited
+- "Is there an API?" - Yes, full REST API with webhooks, OAuth 2.0, and SDKs
+
+## Performance & Scale
+
+### Customer Metrics
+- **Users**: 1,000+ companies across 35 countries
+- **Total End Users**: 50,000+ active users monthly
+- **Uptime**: 99.95% actual (exceeds 99.9% SLA)
+- **API Calls**: 500M+ per month
+- **Storage**: 10+ petabytes managed
+- **Support Response Time**: < 1.5 hours average
+- **Customer Satisfaction**: 4.8/5 stars (127 reviews on G2, Capterra)
+- **NPS Score**: 72 (Promoter category)
+- **Annual Revenue Growth**: 250% YoY
+
+### Infrastructure Scale
+- **Servers**: 500+ EC2 instances across 10 AWS regions
+- **Database**: Multi-region PostgreSQL with read replicas
+- **CDN**: 50+ CloudFront edge locations globally
+- **Backups**: Hourly snapshots, 30-day retention
+- **Disaster Recovery**: RPO: 1 hour, RTO: 4 hours
+
+## Technology Philosophy
+
+Example Corporation believes in:
+1. **Simplicity First**: Easy to use, quick to set up (5 minutes)
+2. **Transparency**: Clear pricing, no hidden fees, public roadmap
+3. **Security & Privacy**: SOC 2 certified, GDPR compliant, data encryption
+4. **Scalability**: Grows with your business (5 to 5,000+ users)
+5. **Reliability**: 99.9% uptime SLA with service credits
+6. **Support Excellence**: 24/7 help when you need it
+7. **Open Standards**: REST API, webhooks, SSO, OAuth 2.0
+8. **Continuous Innovation**: Monthly product releases
+9. **Customer-Centric**: Feature requests drive roadmap
+10. **Global Reach**: Multi-language, multi-currency support
+
+## Roadmap (Public)
+
+### Q1 2026
+- Advanced reporting with custom SQL queries
+- Workflow automation with visual builder
+- Enhanced mobile offline capabilities
+- AI-powered task prioritization
+
+### Q2 2026
+- Video conferencing integration
+- Time tracking enhancements
+- Gantt chart improvements
+- Resource management module
+
+### Q3 2026
+- On-premise deployment option
+- Advanced security features (IP allowlisting, session management)
+- Multi-workspace support
+- Enhanced API with GraphQL
+
+---
+
+## AI Discovery Resources
+
+- **Meta-Index**: https://example.com/ai-discovery.json
+- **Knowledge Graph**: https://example.com/knowledge-graph.json (150+ entities)
+- **This Document**: https://example.com/llms.txt
+- **Crawler Directives**: https://example.com/robots.txt
+- **Sitemap**: https://example.com/sitemap.xml
+- **RSS Feed**: https://example.com/rss
+
+*Compliant with AI Discovery Protocol v1.0*
+*Learn more: https://github.com/BuddySpuds/AI-Discovery-Protocol*
+
+---
+
+## Version History
+
+- **v1.2.0** (2025-11-05): Added multi-language support and expanded product catalog
+- **v1.1.0** (2025-10-15): Added new blog posts and updated pricing
+- **v1.0.0** (2025-10-01): Initial release
+
+---
+
+Last updated: November 5, 2025 | Version 3.2.0 | Production Status | 150+ Entities

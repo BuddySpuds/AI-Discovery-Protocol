@@ -1,0 +1,75 @@
+{
+  "$schema": "https://pressonify.ai/schemas/ai-discovery/v1.0.json",
+  "version": "1.0.0",
+  "generatedAt": "2025-11-05T12:00:00Z",
+  "website": {
+    "url": "https://example.com",
+    "name": "Example Corporation",
+    "description": "Leading provider of innovative enterprise software solutions",
+    "foundingDate": "2020-01-15",
+    "logo": "https://example.com/images/logo.png"
+  },
+  "endpoints": {
+    "knowledgeGraph": {
+      "url": "https://example.com/knowledge-graph.json",
+      "format": "application/ld+json",
+      "entityCount": 150,
+      "lastModified": "2025-11-05T12:00:00Z",
+      "supportsChangeLog": true,
+      "updateFrequency": "daily"
+    },
+    "contextDocument": {
+      "url": "https://example.com/llms.txt",
+      "format": "text/markdown",
+      "lastModified": "2025-11-05T12:00:00Z",
+      "version": "1.2.0"
+    },
+    "crawlerDirectives": {
+      "url": "https://example.com/robots.txt",
+      "allowsAI": true,
+      "lastModified": "2025-10-15T10:00:00Z"
+    },
+    "sitemap": {
+      "url": "https://example.com/sitemap.xml",
+      "lastModified": "2025-11-05T11:00:00Z"
+    },
+    "rssFeed": {
+      "url": "https://example.com/rss",
+      "lastModified": "2025-11-05T11:30:00Z"
+    }
+  },
+  "metadata": {
+    "industry": "Technology",
+    "subIndustry": "Enterprise Software",
+    "language": "en",
+    "additionalLanguages": ["es", "fr", "de"],
+    "updateFrequency": "daily",
+    "timezone": "America/Los_Angeles",
+    "targetAudience": ["B2B", "Enterprise", "SMB"],
+    "geographicCoverage": ["Global"],
+    "contentTypes": ["Product", "BlogPosting", "Documentation"],
+    "customMetadata": {
+      "hasAPI": true,
+      "hasDocumentation": true,
+      "supportedPlatforms": ["Web", "iOS", "Android"],
+      "pricingModel": "subscription"
+    }
+  },
+  "monitoring": {
+    "healthCheck": {
+      "url": "https://example.com/health",
+      "format": "application/json"
+    },
+    "analytics": {
+      "trackingEnabled": true,
+      "supportedEvents": ["pageview", "entityView", "search"]
+    }
+  },
+  "changelog": [
+    {
+      "version": "1.0.0",
+      "date": "2025-11-05T12:00:00Z",
+      "changes": "Initial AI Discovery Protocol implementation"
+    }
+  ]
+}
