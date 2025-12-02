@@ -1,0 +1,77 @@
+{
+  "$schema": "https://pressonify.ai/schemas/ai-discovery/v2.0.json",
+  "version": "2.0",
+  "generatedAt": "2025-12-02T15:30:00Z",
+  "website": {
+    "url": "https://pressonify.ai",
+    "name": "Pressonify.ai",
+    "description": "AI-powered press release platform with 60-second publishing and SEO optimization for AI search engines"
+  },
+  "endpoints": {
+    "knowledgeGraph": {
+      "url": "https://pressonify.ai/knowledge-graph.json",
+      "format": "application/ld+json",
+      "lastModified": "2025-12-02T15:00:00Z",
+      "entityCount": 147,
+      "version": "2.8.3"
+    },
+    "contextDocument": {
+      "url": "https://pressonify.ai/llms.txt",
+      "format": "text/markdown",
+      "lastModified": "2025-12-01T10:00:00Z",
+      "sections": [
+        "Overview",
+        "Platform Features",
+        "AI Discovery Protocol",
+        "PresSEO Shopify App",
+        "Recent Press Releases",
+        "Contact"
+      ]
+    },
+    "crawlerDirectives": {
+      "url": "https://pressonify.ai/robots.txt",
+      "allowsAI": true
+    }
+  },
+  "capabilities": {
+    "supportsVersioning": true,
+    "supportsIncrementalUpdates": true,
+    "supportsChangeDetection": true,
+    "updateFrequency": "daily"
+  },
+  "contact": {
+    "email": "ai-discovery@pressonify.ai",
+    "issuesUrl": "https://github.com/BuddySpuds/AI-Discovery-Protocol/issues"
+  },
+  "metadata": {
+    "industry": "SaaS / Marketing Technology",
+    "language": "en",
+    "timezone": "UTC"
+  },
+  "shopify": {
+    "entityCounts": {
+      "products": 428,
+      "collections": 12,
+      "blogs": 8,
+      "pages": 15
+    },
+    "optimization": {
+      "version": "2.0",
+      "scoringModel": "adp-v2.0-8factor",
+      "distribution": {
+        "fullyOptimized": 342,
+        "partiallyOptimized": 89,
+        "basic": 10
+      },
+      "baselineScoreRange": [35, 55],
+      "averageScore": 73.5,
+      "lastOptimized": "2025-12-02T14:30:00Z"
+    },
+    "features": {
+      "searchNotification": {
+        "enabled": true,
+        "provider": "IndexNow"
+      }
+    }
+  }
+}

@@ -1,11 +1,18 @@
-# AI Discovery Protocol (ADP) v1.0
+# AI Discovery Protocol (ADP)
 ## Making Websites Discoverable to AI Systems
 
-**Status:** Draft Specification
-**Version:** 1.0.0
-**Published:** November 2, 2025
+**Status:** Open Specification
+**Current Version:** 2.0 (December 2, 2025)
+**Initial Release:** 1.0.0 (November 5, 2025)
 **Author:** Pressonify.ai
 **License:** MIT License
+
+---
+
+## Version History
+
+- **v2.0** (December 2, 2025) — Enhanced capabilities, optimization transparency, simplified versioning
+- **v1.0.0** (November 5, 2025) — Initial specification release
 
 ---
 
@@ -133,12 +140,12 @@ Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 Last-Modified: Sat, 02 Nov 2025 12:00:00 GMT
 ```
 
-**Schema:**
+**Schema (v2.0):**
 
 ```json
 {
-  "$schema": "https://pressonify.ai/schemas/ai-discovery/v1.0.json",
-  "version": "1.0.0",
+  "$schema": "https://pressonify.ai/schemas/ai-discovery/v2.0.json",
+  "version": "2.0",
   "generatedAt": "2025-11-02T12:00:00Z",
   "website": {
     "url": "https://example.com",
@@ -149,9 +156,9 @@ Last-Modified: Sat, 02 Nov 2025 12:00:00 GMT
     "knowledgeGraph": {
       "url": "https://example.com/knowledge-graph.json",
       "format": "application/ld+json",
-      "lastModified": "2025-11-02T11:30:00Z",
+      "lastModified": "2025-12-02T11:30:00Z",
       "entityCount": 132,
-      "version": "2.1.5"
+      "version": "2.8.3"
     },
     "contextDocument": {
       "url": "https://example.com/llms.txt",
@@ -178,14 +185,19 @@ Last-Modified: Sat, 02 Nov 2025 12:00:00 GMT
 ```
 
 **Required Fields:**
-- `version` (string): Semantic version of ai-discovery.json format
+- `version` (string): Major.minor version of ai-discovery.json format (e.g., "2.0")
 - `generatedAt` (string): ISO 8601 timestamp
 - `website.url` (string): Canonical URL of the website
 
-**Optional Fields:**
+**Optional Fields (v2.0 Enhancements):**
 - `endpoints.*`: References to other discovery files
-- `capabilities.*`: Feature support flags
-- `contact.*`: Technical contact information
+- `capabilities.*`: Feature support flags (NEW in v2.0)
+- `contact.*`: Technical contact information (NEW in v2.0)
+
+**Version Pattern Change (v2.0):**
+- v1.0: Semantic versioning pattern `^\d+\.\d+\.\d+$` (e.g., "1.0.0")
+- v2.0: Major.minor pattern `^\d+\.\d+$` (e.g., "2.0")
+- Rationale: Protocol versions track spec changes, not implementation versions
 
 ---
 
@@ -434,15 +446,23 @@ Sites can implement ADP at three levels:
 - Provides site overview
 - Low implementation effort
 
-**Example:**
+**Example (v2.0):**
 ```json
 {
-  "version": "1.0.0",
-  "generatedAt": "2025-11-02T12:00:00Z",
+  "$schema": "https://pressonify.ai/schemas/ai-discovery/v2.0.json",
+  "version": "2.0",
+  "generatedAt": "2025-12-02T12:00:00Z",
   "website": {
     "url": "https://example.com",
     "name": "Example Corp",
     "description": "Professional widget provider"
+  },
+  "capabilities": {
+    "supportsVersioning": true,
+    "updateFrequency": "daily"
+  },
+  "contact": {
+    "email": "ai-discovery@example.com"
   }
 }
 ```
@@ -483,11 +503,12 @@ Sites can implement ADP at three levels:
 
 ### Example 1: E-commerce Site (Shopify Store)
 
-**ai-discovery.json:**
+**ai-discovery.json (v2.0):**
 ```json
 {
-  "version": "1.0.0",
-  "generatedAt": "2025-11-02T12:00:00Z",
+  "$schema": "https://pressonify.ai/schemas/ai-discovery/v2.0.json",
+  "version": "2.0",
+  "generatedAt": "2025-12-02T12:00:00Z",
   "website": {
     "url": "https://mystore.com",
     "name": "My Awesome Store",
@@ -498,7 +519,7 @@ Sites can implement ADP at three levels:
       "url": "https://mystore.com/knowledge-graph.json",
       "format": "application/ld+json",
       "entityCount": 250,
-      "version": "1.0.0"
+      "version": "2.0.1"
     },
     "contextDocument": {
       "url": "https://mystore.com/llms.txt",
@@ -507,7 +528,12 @@ Sites can implement ADP at three levels:
   },
   "capabilities": {
     "supportsVersioning": true,
+    "supportsIncrementalUpdates": false,
+    "supportsChangeDetection": false,
     "updateFrequency": "daily"
+  },
+  "contact": {
+    "email": "ai-discovery@mystore.com"
   }
 }
 ```
@@ -542,28 +568,30 @@ Sites can implement ADP at three levels:
 
 ### Example 2: SaaS Company (Pressonify.ai)
 
-**ai-discovery.json:**
+**ai-discovery.json (v2.0 - Production):**
 ```json
 {
-  "version": "1.0.0",
-  "generatedAt": "2025-11-02T12:00:00Z",
+  "$schema": "https://pressonify.ai/schemas/ai-discovery/v2.0.json",
+  "version": "2.0",
+  "generatedAt": "2025-12-02T15:30:00Z",
   "website": {
     "url": "https://pressonify.ai",
     "name": "Pressonify.ai",
-    "description": "AI-powered press release platform with 60-second publishing"
+    "description": "AI-powered press release platform with 60-second publishing and SEO optimization for AI search engines"
   },
   "endpoints": {
     "knowledgeGraph": {
       "url": "https://pressonify.ai/knowledge-graph.json",
       "format": "application/ld+json",
-      "lastModified": "2025-11-02T11:30:00Z",
-      "entityCount": 132,
-      "version": "2.7.1"
+      "lastModified": "2025-12-02T15:00:00Z",
+      "entityCount": 147,
+      "version": "2.8.3"
     },
     "contextDocument": {
       "url": "https://pressonify.ai/llms.txt",
       "format": "text/markdown",
-      "lastModified": "2025-11-01T10:00:00Z"
+      "lastModified": "2025-12-01T10:00:00Z",
+      "sections": ["Overview", "Platform Features", "AI Discovery Protocol", "PresSEO Shopify App", "Recent Press Releases", "Contact"]
     },
     "crawlerDirectives": {
       "url": "https://pressonify.ai/robots.txt",
@@ -577,7 +605,39 @@ Sites can implement ADP at three levels:
     "updateFrequency": "daily"
   },
   "contact": {
-    "email": "ai-discovery@pressonify.ai"
+    "email": "ai-discovery@pressonify.ai",
+    "issuesUrl": "https://github.com/BuddySpuds/AI-Discovery-Protocol/issues"
+  },
+  "metadata": {
+    "industry": "SaaS / Marketing Technology",
+    "language": "en",
+    "timezone": "UTC"
+  },
+  "shopify": {
+    "entityCounts": {
+      "products": 428,
+      "collections": 12,
+      "blogs": 8,
+      "pages": 15
+    },
+    "optimization": {
+      "version": "2.0",
+      "scoringModel": "adp-v2.0-8factor",
+      "distribution": {
+        "fullyOptimized": 342,
+        "partiallyOptimized": 89,
+        "basic": 10
+      },
+      "baselineScoreRange": [35, 55],
+      "averageScore": 73.5,
+      "lastOptimized": "2025-12-02T14:30:00Z"
+    },
+    "features": {
+      "searchNotification": {
+        "enabled": true,
+        "provider": "IndexNow"
+      }
+    }
   }
 }
 ```
@@ -586,11 +646,12 @@ Sites can implement ADP at three levels:
 
 ### Example 3: Blog/Publisher
 
-**ai-discovery.json:**
+**ai-discovery.json (v2.0):**
 ```json
 {
-  "version": "1.0.0",
-  "generatedAt": "2025-11-02T12:00:00Z",
+  "$schema": "https://pressonify.ai/schemas/ai-discovery/v2.0.json",
+  "version": "2.0",
+  "generatedAt": "2025-12-02T12:00:00Z",
   "website": {
     "url": "https://techblog.com",
     "name": "Tech Blog Daily",
@@ -600,12 +661,21 @@ Sites can implement ADP at three levels:
     "knowledgeGraph": {
       "url": "https://techblog.com/knowledge-graph.json",
       "format": "application/ld+json",
-      "entityCount": 500
+      "entityCount": 500,
+      "version": "2.0.0"
     },
     "contextDocument": {
       "url": "https://techblog.com/llms.txt",
       "format": "text/markdown"
     }
+  },
+  "capabilities": {
+    "supportsVersioning": true,
+    "supportsIncrementalUpdates": true,
+    "updateFrequency": "hourly"
+  },
+  "contact": {
+    "email": "ai-discovery@techblog.com"
   }
 }
 ```
@@ -697,10 +767,12 @@ We welcome community feedback and proposals for future extensions. Please submit
 - [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) by Anthropic
 
 ### Resources
-- **GitHub Repository**: https://github.com/pressonify/ai-discovery-protocol
-- **JSON Schema**: https://pressonify.ai/schemas/ai-discovery/v1.0.json
+- **GitHub Repository**: https://github.com/BuddySpuds/AI-Discovery-Protocol
+- **v2.0 JSON Schema**: https://pressonify.ai/schemas/ai-discovery/v2.0.json
+- **v1.0 JSON Schema**: https://pressonify.ai/schemas/ai-discovery/v1.0.json (legacy)
+- **Migration Guide**: [docs/V2_MIGRATION_GUIDE.md](docs/V2_MIGRATION_GUIDE.md)
 - **Validation Tool**: https://pressonify.ai/tools/adp-validator
-- **Discussion Forum**: https://github.com/pressonify/ai-discovery-protocol/discussions
+- **Discussion Forum**: https://github.com/BuddySpuds/AI-Discovery-Protocol/discussions
 
 ---
 
@@ -734,7 +806,17 @@ SOFTWARE.
 
 ## Changelog
 
-### Version 1.0.0 (November 2, 2025)
+### Version 2.0 (December 2, 2025)
+- **Added:** `capabilities` object for protocol feature declaration
+- **Added:** `contact` object for ADP support channels
+- **Added:** Enhanced `shopify.optimization` block with distribution metadata
+- **Changed:** Version pattern from semantic (1.0.0) to major.minor (2.0)
+- **Changed:** `metadata` object from required to optional
+- **Deprecated:** `shopify.optimizationStatus` (replaced by `shopify.optimization`)
+- **Enhanced:** Optimization transparency with 8-factor scoring model exposure
+- See [CHANGELOG.md](CHANGELOG.md) for detailed release notes
+
+### Version 1.0.0 (November 5, 2025)
 - Initial specification release
 - Core architecture: ai-discovery.json, knowledge-graph.json, llms.txt, robots.txt
 - Versioning and change detection support
@@ -745,6 +827,7 @@ SOFTWARE.
 
 **Published by:** [Pressonify.ai](https://pressonify.ai)
 **Contributors:** Robert Porter, Claude (Anthropic)
-**Last Updated:** November 2, 2025
+**Current Version:** 2.0 (December 2, 2025)
+**Last Updated:** December 2, 2025
 
 *We welcome feedback, contributions, and implementations of this standard. Please join the discussion at our GitHub repository.*

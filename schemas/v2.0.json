@@ -1,0 +1,275 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://pressonify.ai/schemas/ai-discovery/v2.0.json",
+  "title": "AI Discovery Protocol v2.0",
+  "description": "Schema for AI Discovery Protocol v2.0 - enables AI systems to discover and understand website content with enhanced optimization metadata",
+  "type": "object",
+  "required": ["$schema", "version", "generatedAt", "website", "endpoints"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri",
+      "description": "JSON Schema reference for validation"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "Major.minor version of the AI Discovery Protocol (e.g., 2.0)"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when this file was generated (UTC with Z suffix)"
+    },
+    "website": {
+      "type": "object",
+      "required": ["url", "name"],
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Primary URL of the website"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Human-readable name of the website or organization"
+        },
+        "description": {
+          "type": "string",
+          "description": "Brief description of the website (1-2 sentences)"
+        }
+      }
+    },
+    "endpoints": {
+      "type": "object",
+      "required": ["knowledgeGraph"],
+      "properties": {
+        "knowledgeGraph": {
+          "type": "object",
+          "required": ["url", "format"],
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri",
+              "description": "URL to the knowledge graph JSON-LD file"
+            },
+            "format": {
+              "type": "string",
+              "enum": ["application/ld+json"],
+              "description": "MIME type of the knowledge graph"
+            },
+            "entityCount": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Number of entities in the knowledge graph"
+            },
+            "lastModified": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO 8601 timestamp of last update"
+            },
+            "version": {
+              "type": "string",
+              "description": "Version of the knowledge graph data"
+            }
+          }
+        },
+        "contextDocument": {
+          "type": "object",
+          "required": ["url", "format"],
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri",
+              "description": "URL to the LLM context document (llms.txt)"
+            },
+            "format": {
+              "type": "string",
+              "enum": ["text/markdown", "text/plain"],
+              "description": "MIME type of the context document"
+            },
+            "sections": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of main sections in the context document"
+            },
+            "lastModified": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO 8601 timestamp of last update"
+            }
+          }
+        },
+        "crawlerDirectives": {
+          "type": "object",
+          "required": ["url", "allowsAI"],
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri",
+              "description": "URL to robots.txt"
+            },
+            "allowsAI": {
+              "type": "boolean",
+              "description": "Whether AI crawlers are allowed"
+            }
+          }
+        }
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "description": "v2.0: Protocol capabilities and features",
+      "properties": {
+        "supportsVersioning": {
+          "type": "boolean",
+          "description": "Whether this endpoint supports versioned responses"
+        },
+        "supportsIncrementalUpdates": {
+          "type": "boolean",
+          "description": "Whether incremental updates are available"
+        },
+        "supportsChangeDetection": {
+          "type": "boolean",
+          "description": "Whether change detection is available"
+        },
+        "updateFrequency": {
+          "type": "string",
+          "enum": ["realtime", "hourly", "daily", "weekly", "monthly", "quarterly", "annually"],
+          "description": "How often content is updated"
+        }
+      }
+    },
+    "contact": {
+      "type": "object",
+      "description": "v2.0: Contact information for ADP-related questions",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Email address for ADP-related inquiries"
+        },
+        "issuesUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL for reporting issues with the ADP implementation"
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "industry": {
+          "type": "string",
+          "description": "Primary industry classification"
+        },
+        "language": {
+          "type": "string",
+          "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+          "description": "Primary language (ISO 639-1 code, e.g., 'en', 'en-US')"
+        },
+        "timezone": {
+          "type": "string",
+          "description": "IANA timezone identifier (e.g., 'America/New_York', 'UTC')"
+        }
+      }
+    },
+    "shopify": {
+      "type": "object",
+      "description": "Shopify-specific extensions for PresSEO app (v2.0 enhancement)",
+      "properties": {
+        "entityCounts": {
+          "type": "object",
+          "properties": {
+            "products": {"type": "integer", "minimum": 0},
+            "collections": {"type": "integer", "minimum": 0},
+            "blogs": {"type": "integer", "minimum": 0},
+            "pages": {"type": "integer", "minimum": 0}
+          }
+        },
+        "optimization": {
+          "type": "object",
+          "description": "v2.0: Optimization distribution and scoring metadata",
+          "properties": {
+            "version": {
+              "type": "string",
+              "description": "Optimization scoring model version"
+            },
+            "scoringModel": {
+              "type": "string",
+              "description": "Name of the scoring algorithm used (e.g., 'adp-v2.0-8factor')"
+            },
+            "distribution": {
+              "type": "object",
+              "description": "Distribution of entities by optimization level",
+              "properties": {
+                "fullyOptimized": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "description": "Number of entities with SEO score >= 70"
+                },
+                "partiallyOptimized": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "description": "Number of entities with SEO score 45-69"
+                },
+                "basic": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "description": "Number of entities with SEO score < 45"
+                }
+              }
+            },
+            "baselineScoreRange": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "description": "Dynamic baseline score range [min, max] for optimization"
+            },
+            "averageScore": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "description": "Average SEO score across all optimized entities"
+            },
+            "lastOptimized": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO 8601 timestamp of last optimization run"
+            }
+          }
+        },
+        "optimizationStatus": {
+          "type": "object",
+          "description": "Legacy v1.0 field (deprecated in v2.0, replaced by 'optimization')",
+          "properties": {
+            "totalEntities": {"type": "integer", "minimum": 0},
+            "fullyOptimized": {"type": "integer", "minimum": 0},
+            "partiallyOptimized": {"type": "integer", "minimum": 0},
+            "basic": {"type": "integer", "minimum": 0},
+            "totalOptimized": {"type": "integer", "minimum": 0},
+            "averageScore": {"type": "number", "minimum": 0, "maximum": 100}
+          }
+        },
+        "features": {
+          "type": "object",
+          "properties": {
+            "searchNotification": {
+              "type": "object",
+              "properties": {
+                "enabled": {"type": "boolean"},
+                "provider": {"type": "string"}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

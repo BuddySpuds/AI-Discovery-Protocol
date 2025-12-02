@@ -1,10 +1,28 @@
-# AI Discovery Protocol (ADP) v1.0
+# AI Discovery Protocol (ADP) v2.0
 
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-1.0.0-green.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-2.0-green.svg)](CHANGELOG.md)
 [![Standard](https://img.shields.io/badge/Status-Open%20Standard-success.svg)](SPECIFICATION.md)
 
 **Making websites discoverable to AI systems (ChatGPT, Claude, Perplexity, Gemini)**
+
+---
+
+## 🆕 What's New in v2.0
+
+**Released:** December 2, 2025
+
+AI Discovery Protocol v2.0 brings enhanced capabilities and transparency for AI-powered optimization:
+
+- **New `capabilities` Object**: Declare protocol features (versioning support, incremental updates, change detection)
+- **New `contact` Object**: Provide support channels for ADP-related inquiries (email, issues URL)
+- **Enhanced Shopify Optimization**: Comprehensive `optimization` block with distribution metadata and scoring transparency
+- **Simplified Version Pattern**: Changed from semantic versioning (1.0.0) to major.minor format (2.0) for clarity
+- **8-Factor Scoring Model**: Exposed optimization scoring methodology for full transparency
+- **Distribution Insights**: Track optimization levels (fully optimized, partially optimized, basic) across entities
+- **Dynamic Baselines**: Adaptive scoring ranges based on content type and complexity
+
+**Migration Guide:** See [docs/V2_MIGRATION_GUIDE.md](docs/V2_MIGRATION_GUIDE.md) for upgrade instructions.
 
 ---
 
