@@ -63,7 +63,7 @@ You **MAY NOT**:
 
 ### 2.4 Compliance Badges
 
-Official ADP compliance badges will be provided for verified implementations. Contact compliance@pressonify.ai for badge access.
+Official ADP compliance badges will be provided for verified implementations. Contact legal@pressonify.ai for badge access.
 
 ---
 
@@ -164,7 +164,7 @@ The AI Discovery Protocol specification is maintained by Robert Porter / Presson
 Feature requests and feedback are welcome via:
 - GitHub Issues
 - GitHub Discussions
-- Email: adp@pressonify.ai
+- Email: info@pressonify.ai
 
 ### 7.4 Future Governance
 
@@ -195,8 +195,8 @@ This document is not legal advice. Consult a qualified attorney for legal matter
 **Email:** legal@pressonify.ai
 **Website:** https://pressonify.ai
 
-**For IP inquiries:** ip@pressonify.ai
-**For compliance questions:** compliance@pressonify.ai
+**For IP inquiries:** legal@pressonify.ai
+**For compliance questions:** support@pressonify.ai
 
 ---
 

@@ -11,11 +11,11 @@
 
 ---
 
-## 🆕 What's New in v2.0
+## 🆕 What's New in v2.1
 
-**Released:** December 2, 2025
+**Released:** December 8, 2025
 
-AI Discovery Protocol v2.0 brings enhanced capabilities and transparency for AI-powered optimization:
+AI Discovery Protocol v2.1 brings enhanced capabilities and transparency for AI-powered optimization:
 
 - **New `capabilities` Object**: Declare protocol features (versioning support, incremental updates, change detection)
 - **New `contact` Object**: Provide support channels for ADP-related inquiries (email, issues URL)
