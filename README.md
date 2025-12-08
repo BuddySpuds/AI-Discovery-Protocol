@@ -1,8 +1,10 @@
-# AI Discovery Protocol (ADP) v2.0
+# AI Discovery Protocol (ADP) v2.1
 
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-2.0-green.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-2.1-059669.svg)](CHANGELOG.md)
 [![Standard](https://img.shields.io/badge/Status-Open%20Standard-success.svg)](SPECIFICATION.md)
+[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-pink.svg)](https://github.com/sponsors/BuddySpuds)
+[![Reference Implementation](https://img.shields.io/badge/Reference-pressonify.ai-black.svg)](https://pressonify.ai/ai-discovery.json)
 
 **Making websites discoverable to AI systems (ChatGPT, Claude, Perplexity, Gemini)**
 
@@ -620,18 +622,46 @@ For more questions, see [FAQ.md](FAQ.md)
 
 ---
 
+## ❤️ Sponsor This Project
+
+ADP is developed and maintained by [Pressonify](https://pressonify.ai). If you find this protocol useful, please consider sponsoring:
+
+<a href="https://github.com/sponsors/BuddySpuds">
+  <img src="https://img.shields.io/badge/Sponsor-❤️-pink?style=for-the-badge&logo=github" alt="Sponsor on GitHub" />
+</a>
+
+### Sponsorship Tiers
+
+| Tier | Amount | Benefits |
+|------|--------|----------|
+| 🌱 **Supporter** | $5/month | Name in SPONSORS.md, early access to updates |
+| 🌿 **Backer** | $25/month | Logo in README, priority issue responses |
+| 🌳 **Sponsor** | $100/month | Featured in docs, implementation review |
+| 🏢 **Enterprise** | $500/month | Dedicated support, custom consulting |
+
+### Why Sponsor?
+
+- **Keep ADP free and open** for everyone
+- **Fund development** of new features (pagination, real-time updates, multi-language)
+- **Get priority support** for your implementation
+- **Shape the future** of AI discoverability standards
+
+[Become a Sponsor →](https://github.com/sponsors/BuddySpuds)
+
+---
+
 ## 📢 Stay Updated
 
-- **Star this repo** to get updates
-- **Watch releases** for new versions
-- **Join discussions** to share feedback
-- **Follow Pressonify.ai** for implementation updates
+- ⭐ **Star this repo** to get updates
+- 👀 **Watch releases** for new versions
+- 💬 **Join discussions** to share feedback
+- 🔗 **Follow [Pressonify.ai](https://pressonify.ai)** for implementation updates
 
 ---
 
 **Published by:** [Pressonify.ai](https://pressonify.ai)
 **Contributors:** Robert Porter, Claude (Anthropic)
-**Version:** 1.0.0
-**Last Updated:** November 5, 2025
+**Version:** 2.1
+**Last Updated:** December 8, 2025
 
 *We welcome feedback, contributions, and implementations of this standard. Join the discussion!*
