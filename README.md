@@ -5,6 +5,7 @@
 [![Standard](https://img.shields.io/badge/Status-Open%20Standard-success.svg)](SPECIFICATION.md)
 [![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-pink.svg)](https://github.com/sponsors/BuddySpuds)
 [![Reference Implementation](https://img.shields.io/badge/Reference-pressonify.ai-black.svg)](https://pressonify.ai/ai-discovery.json)
+[![IP Policy](https://img.shields.io/badge/IP%20Policy-Protected-orange.svg)](INTELLECTUAL_PROPERTY.md)
 
 **Making websites discoverable to AI systems (ChatGPT, Claude, Perplexity, Gemini)**
 
