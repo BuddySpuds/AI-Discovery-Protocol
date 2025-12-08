@@ -22,6 +22,22 @@ SOFTWARE.
 
 ---
 
+ATTRIBUTION REQUIREMENT
+
+Derivative works, forks, and implementations must include visible attribution
+to the original project in their README or equivalent documentation:
+
+"Based on AI Discovery Protocol (ADP) by Robert Porter / Pressonify.ai
+https://github.com/BuddySpuds/AI-Discovery-Protocol"
+
+This attribution requirement applies to:
+- Forked repositories
+- Derivative specifications
+- Tools and libraries implementing ADP
+- Documentation describing ADP-based systems
+
+---
+
 TRADEMARK NOTICE
 
 "AI Discovery Protocol" and "ADP" are trademarks of Robert Porter / Pressonify.ai.
