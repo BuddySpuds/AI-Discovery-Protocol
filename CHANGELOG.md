@@ -6,6 +6,70 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [2.1] - 2025-12-27
+
+### Added
+- **Proof Infrastructure** — New component for verifying AI crawler engagement
+  - **Crawler Hit Tracking** — Log and analyze AI crawler activity on ADP endpoints
+    - Identifies 11 AI crawlers: GPTBot, ClaudeBot, PerplexityBot, Google-Extended, Bingbot, Cohere-AI, YouBot, Applebot-Extended, Meta-ExternalAgent, CCBot, Diffbot
+    - Fire-and-forget async logging (zero performance impact)
+    - Daily aggregation for trend analysis
+  - **Citation Monitoring** — Track when AI platforms cite your content
+    - Perplexity API integration with `sonar` model
+    - Multi-platform support (ChatGPT, Claude, Gemini passive tracking)
+    - Query deduplication via SHA-256 hashing (24-hour window)
+  - **Public Transparency API** — Expose crawler statistics
+    - `/api/v1/adp/stats` — Overall statistics
+    - `/api/v1/adp/stats/crawlers` — Top crawlers ranked
+    - `/api/v1/adp/stats/endpoints` — Top endpoints ranked
+    - `/api/v1/adp/stats/daily` — Daily trends
+
+- **Enhanced HTTP Headers** — Additional response headers for ADP endpoints
+  - `Content-Digest: sha-256=...` — Integrity verification
+  - `X-Update-Frequency` — Crawler scheduling hints (realtime, hourly, daily, weekly)
+  - Complements existing `ETag` for cache validation
+
+- **llms-lite.txt Endpoint** — Minimal context document (198 tokens)
+  - For systems with strict context limits
+  - Complements `/llms.txt` (1,247 tokens) and `/llms-full.txt` (13,451 tokens)
+
+- **CORS Support** — `Access-Control-Allow-Origin: *` on all ADP endpoints
+  - Enables client-side AI tools to fetch ADP resources
+  - Required for browser-based AI assistants
+
+### Changed
+- **Version format** — Incremented to 2.1 (proof infrastructure release)
+- **Documentation** — Added proof infrastructure implementation guide
+- **Reference implementation** — Pressonify.ai upgraded to ADP v2.1+
+
+### Proof Infrastructure Philosophy
+The gap between "claiming AI optimization" and "proving AI engagement" undermines trust in the ADP ecosystem. v2.1 addresses this with:
+
+1. **Transparency** — Public APIs showing crawler activity
+2. **Verification** — Citation tracking confirms AI systems use your content
+3. **Accountability** — Logged evidence replacing marketing claims
+
+### Reference Implementation
+- **Pressonify.ai** upgraded to ADP v2.1+ on December 27, 2025
+- **Live endpoints:**
+  - Crawler stats: https://pressonify.ai/api/v1/adp/stats
+  - Citation stats: https://pressonify.ai/api/v1/citations/stats
+  - LLM context: https://pressonify.ai/llms.txt
+- **Documentation:** [ADP 2.1+: Proof Infrastructure](https://pressonify.ai/blog/adp-2-1-proof-infrastructure-crawler-tracking)
+
+### Industry Comparison (December 2025)
+| Platform | /llms.txt | /.well-known/ai.json | Crawler Tracking |
+|----------|-----------|----------------------|------------------|
+| PR Newswire | 404 | 404 | No |
+| PRWeb | 404 | 404 | No |
+| BusinessWire | 404 | 404 | No |
+| GlobeNewswire | 404 | 404 | No |
+| **Pressonify** | **200** | **200** | **Yes (11 crawlers)** |
+
+Full comparison: [PR Platforms AI-Readiness Audit](https://pressonify.ai/blog/pr-platforms-ai-readiness-comparison-2025)
+
+---
+
 ## [2.0] - 2025-12-02
 
 ### Added
