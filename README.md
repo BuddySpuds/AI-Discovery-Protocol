@@ -48,7 +48,7 @@ AI System → GET /ai-discovery.json (Single entry point)
 ## What's New in v2.1
 
 ### Core Enhancements
-- **17 Endpoint Architecture** - Expanded from 4 to 17 specialized endpoints
+- **20 Endpoint Architecture** - Expanded from 4 to 20 specialized endpoints
 - **News Namespace** - `/news/*` endpoints for news-specific AI optimization
 - **Tiered Content** - `/llms.txt`, `/llms-full.txt`, `/llms-lite.txt` for different AI needs
 - **Proof Infrastructure** - Track AI crawler visits and measure citation success
@@ -191,8 +191,11 @@ Complete ADP implementation with proof infrastructure:
 | Endpoint | Format | Purpose |
 |----------|--------|---------|
 | `/.well-known/ai.json` | JSON | Standardized discovery |
+| `/.well-known/security.txt` | Text | Security contact info |
 | `/opensearch.xml` | XML | Browser search plugin |
+| `/ai-discovery.md` | Markdown | Human-readable discovery |
 | `/api/webhooks/discovery` | JSON | Webhook registration |
+| `/api/v1/adp/stats` | JSON | Public crawler statistics |
 
 ---
 

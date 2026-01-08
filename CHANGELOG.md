@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### News AI Discoverability Sprint
 
-Major expansion from 11 to 17 endpoints with new capabilities for news publishers and proof infrastructure.
+Major expansion from 11 to 20 endpoints with new capabilities for news publishers and proof infrastructure.
 
 ### Added
 
@@ -40,7 +40,7 @@ Major expansion from 11 to 17 endpoints with new capabilities for news publisher
 
 ### Changed
 
-- Endpoint count: 11 → 17
+- Endpoint count: 11 → 20
 - Implementation levels: 3 → 4 (added Enterprise tier with citation tracking)
 - Reference implementation updated to Pressonify.ai v2.9.6
 
@@ -150,7 +150,7 @@ First public release of the AI Discovery Protocol specification.
 
 | Feature | v1.0 | v2.0 | v2.1 |
 |---------|------|------|------|
-| Endpoints | 4 | 11 | 17 |
+| Endpoints | 4 | 11 | 20 |
 | News Namespace | - | - | ✓ |
 | HTTP Headers | - | ✓ | ✓ |
 | Proof Infrastructure | - | - | ✓ |

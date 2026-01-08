@@ -30,7 +30,7 @@
 The AI Discovery Protocol (ADP) is an open standard that enables websites to make their content discoverable and understandable to AI systems (LLMs, AI search engines, reasoning engines, and AI agents). Unlike traditional SEO which optimizes for keyword-based search crawlers, ADP provides structured, machine-readable metadata specifically designed for AI reasoning systems.
 
 ADP v2.1 introduces:
-- **17 endpoint architecture** (expanded from 4 in v1.0)
+- **20 endpoint architecture** (expanded from 4 in v1.0)
 - **News namespace** for publishers and news content
 - **Proof infrastructure** for tracking AI crawler visits and citations
 - **HTTP security headers** for cache validation and integrity verification
