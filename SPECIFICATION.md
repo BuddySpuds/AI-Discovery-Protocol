@@ -1,168 +1,146 @@
-# AI Discovery Protocol (ADP) v1.0
-## Making Websites Discoverable to AI Systems
+# AI Discovery Protocol (ADP) v2.1
 
-**Status:** Draft Specification
-**Version:** 1.0.0
-**Published:** November 2, 2025
+## Complete Specification
+
+**Status:** Production Specification
+**Version:** 2.1
+**Published:** January 8, 2026
 **Author:** Pressonify.ai
 **License:** MIT License
 
 ---
 
-## Abstract
-
-The AI Discovery Protocol (ADP) is an open standard that enables websites to make their content discoverable and understandable to AI systems (LLMs, search engines, reasoning engines, and AI agents). Unlike traditional SEO which optimizes for keyword-based search crawlers, ADP provides structured, machine-readable metadata specifically designed for AI reasoning systems.
-
-ADP builds upon existing standards (Schema.org, JSON-LD, robots.txt) while introducing novel mechanisms for AI-first content discovery, versioning, and incremental updates.
-
----
-
 ## Table of Contents
 
-1. [Problem Statement](#problem-statement)
-2. [Design Principles](#design-principles)
-3. [Core Architecture](#core-architecture)
-4. [Specification](#specification)
-   - [4.1 ai-discovery.json (Meta-Index)](#41-ai-discoveryjson-meta-index)
-   - [4.2 knowledge-graph.json (Entity Catalog)](#42-knowledge-graphjson-entity-catalog)
-   - [4.3 llms.txt (Context Document)](#43-llmstxt-context-document)
-   - [4.4 robots.txt (Crawler Directives)](#44-robotstxt-crawler-directives)
-5. [Implementation Levels](#implementation-levels)
-6. [Examples](#examples)
-7. [Security Considerations](#security-considerations)
-8. [Future Extensions](#future-extensions)
-9. [References](#references)
+1. [Abstract](#1-abstract)
+2. [Design Principles](#2-design-principles)
+3. [Core Architecture](#3-core-architecture)
+4. [Endpoint Specifications](#4-endpoint-specifications)
+5. [HTTP Headers](#5-http-headers)
+6. [News Namespace](#6-news-namespace)
+7. [Security Considerations](#7-security-considerations)
+8. [Implementation Levels](#8-implementation-levels)
+9. [Proof Infrastructure](#9-proof-infrastructure)
+10. [Migration Guide](#10-migration-guide)
 
 ---
 
-## 1. Problem Statement
+## 1. Abstract
 
-### Traditional SEO vs AI Discovery
+The AI Discovery Protocol (ADP) is an open standard that enables websites to make their content discoverable and understandable to AI systems (LLMs, AI search engines, reasoning engines, and AI agents). Unlike traditional SEO which optimizes for keyword-based search crawlers, ADP provides structured, machine-readable metadata specifically designed for AI reasoning systems.
 
-Traditional search engine optimization (SEO) was designed for keyword-based crawlers that:
-- Index HTML pages with minimal semantic understanding
-- Rely on keyword matching and backlink analysis
-- Use heuristic algorithms (PageRank, etc.)
-
-AI systems (ChatGPT, Claude, Perplexity, Gemini) work fundamentally differently:
-- **Query structured entity catalogs** instead of keyword indexes
-- **Reason over relationships** between entities
-- **Require context windows** optimized for AI processing
-- **Need freshness signals** for cache invalidation
-
-### Current Limitations
-
-1. **No standard entry point**: AI systems must guess where to find structured data
-2. **HTML overhead**: Pages with navigation, ads, and JavaScript are inefficient to process
-3. **No versioning**: AI systems can't detect when content has changed
-4. **No entity index**: AI must parse entire sites to discover entities
-5. **Scattered metadata**: Schema.org exists but lacks coordination with other discovery files
+ADP v2.1 introduces:
+- **17 endpoint architecture** (expanded from 4 in v1.0)
+- **News namespace** for publishers and news content
+- **Proof infrastructure** for tracking AI crawler visits and citations
+- **HTTP security headers** for cache validation and integrity verification
+- **Tiered content** for different AI system needs
 
 ---
 
 ## 2. Design Principles
 
-The AI Discovery Protocol follows these core principles:
+### 2.1 Single Entry Point
+- AI systems request `/ai-discovery.json` first
+- All other endpoints are referenced from this meta-index
+- Predictable, no guessing required
 
-### 2.1 Simplicity Over Features
-- **Minimal required files**: Only `/ai-discovery.json` is mandatory
-- **Progressive enhancement**: Sites can implement features incrementally
-- **No complex schemas**: Use existing standards (Schema.org, JSON-LD)
+### 2.2 Build on Standards
+- Schema.org vocabularies for entities
+- JSON-LD format (W3C-recommended)
+- Standard HTTP headers
 
-### 2.2 Single Entry Point
-- **One canonical file**: AI systems request `/ai-discovery.json` first
-- **Discovery from root**: All other files are referenced from the meta-index
-- **No guessing**: Clear, predictable structure
+### 2.3 Progressive Enhancement
+- Only `/ai-discovery.json` is strictly required
+- Additional endpoints provide incremental value
+- Sites can implement features at their own pace
 
-### 2.3 Build on Standards
-- **Schema.org compatibility**: Use established vocabularies
-- **JSON-LD format**: W3C-recommended linked data format
-- **HTTP standards**: Standard headers (`Last-Modified`, `Cache-Control`)
-
-### 2.4 Incremental Update Support
-- **Versioning**: Track changes to entities and metadata
-- **Change logs**: Enable smart re-crawling
-- **Timestamps**: RFC 3339 format for all dates
-
-### 2.5 Developer-Friendly
-- **JSON format**: Modern, widely supported
-- **Clear examples**: Comprehensive documentation
-- **Validation tools**: JSON Schema for validation
+### 2.4 AI-First Design
+- Content sized for context windows
+- Structured for AI extraction
+- Freshness signals for cache management
 
 ---
 
 ## 3. Core Architecture
 
-### File Structure
+### 3.1 File Structure
 
 ```
 website.com/
 ├── ai-discovery.json          # Meta-index (REQUIRED)
-├── knowledge-graph.json       # Entity catalog (RECOMMENDED)
-├── llms.txt                   # AI-readable context (RECOMMENDED)
-└── robots.txt                 # Crawler directives (STANDARD)
+├── knowledge-graph.json       # Entity catalog (Recommended)
+├── llms.txt                   # Context document (Recommended)
+├── llms-lite.txt             # Minimal context (Optional)
+├── llms-full.txt             # Comprehensive context (Optional)
+├── robots.txt                 # Crawler directives (Recommended)
+├── feed.json                  # JSON Feed (Optional)
+├── updates.json               # Recent changes (Optional)
+├── ai-sitemap.xml            # AI sitemap (Optional)
+├── opensearch.xml            # Search plugin (Optional)
+├── .well-known/
+│   └── ai.json               # Well-known discovery (Optional)
+├── news/                      # News namespace (Optional)
+│   ├── llms.txt              # News context
+│   ├── speakable.json        # Voice content
+│   ├── changelog.json        # Version history
+│   └── archive.jsonl         # Historical streaming
+└── api/
+    └── webhooks/
+        └── discovery          # Webhook registration (Optional)
 ```
 
-### Discovery Flow
+### 3.2 Request Flow
 
 ```
-AI System → GET /ai-discovery.json
-          ↓
-       Parse meta-index
-          ↓
-       ┌────────────┬──────────────┬─────────────┐
-       ↓            ↓              ↓             ↓
-  knowledge-   llms.txt      robots.txt    Other
-  graph.json                               endpoints
+AI System
+    │
+    ▼
+GET /ai-discovery.json
+    │
+    ├──► Parse meta-index
+    │
+    ▼
+Discover available endpoints
+    │
+    ├──► /knowledge-graph.json (entities)
+    ├──► /llms.txt (context)
+    ├──► /feed.json (updates)
+    └──► /news/* (news content)
 ```
 
 ---
 
-## 4. Specification
+## 4. Endpoint Specifications
 
-### 4.1 ai-discovery.json (Meta-Index)
+### 4.1 `/ai-discovery.json` (REQUIRED)
 
-**Purpose:** Single entry point that maps all AI discovery resources on the site.
+The single entry point for AI discovery. All other endpoints are referenced here.
 
-**Location:** `https://example.com/ai-discovery.json`
-
-**HTTP Headers:**
-```http
-Content-Type: application/json
-Cache-Control: public, max-age=3600, stale-while-revalidate=86400
-Last-Modified: Sat, 02 Nov 2025 12:00:00 GMT
-```
-
-**Schema:**
+**Response:**
 
 ```json
 {
-  "$schema": "https://pressonify.ai/schemas/ai-discovery/v1.0.json",
-  "version": "1.0.0",
-  "generatedAt": "2025-11-02T12:00:00Z",
+  "version": "2.1",
+  "generatedAt": "2026-01-08T12:00:00Z",
   "website": {
     "url": "https://example.com",
     "name": "Example Corporation",
-    "description": "Leading provider of example products and services"
+    "description": "Brief description of the website",
+    "primaryLanguage": "en",
+    "category": "technology"
   },
   "endpoints": {
-    "knowledgeGraph": {
-      "url": "https://example.com/knowledge-graph.json",
-      "format": "application/ld+json",
-      "lastModified": "2025-11-02T11:30:00Z",
-      "entityCount": 132,
-      "version": "2.1.5"
-    },
-    "contextDocument": {
-      "url": "https://example.com/llms.txt",
-      "format": "text/markdown",
-      "lastModified": "2025-11-01T10:00:00Z",
-      "sections": ["Overview", "Products", "Press Releases", "Contact"]
-    },
-    "crawlerDirectives": {
-      "url": "https://example.com/robots.txt",
-      "allowsAI": true
-    }
+    "knowledgeGraph": "/knowledge-graph.json",
+    "contextDocument": "/llms.txt",
+    "contextDocumentFull": "/llms-full.txt",
+    "contextDocumentLite": "/llms-lite.txt",
+    "crawlerDirectives": "/robots.txt",
+    "contentFeed": "/feed.json",
+    "recentUpdates": "/updates.json",
+    "aiSitemap": "/ai-sitemap.xml",
+    "newsNamespace": "/news/",
+    "webhookDiscovery": "/api/webhooks/discovery"
   },
   "capabilities": {
     "supportsVersioning": true,
@@ -171,74 +149,31 @@ Last-Modified: Sat, 02 Nov 2025 12:00:00 GMT
     "updateFrequency": "daily"
   },
   "contact": {
-    "email": "ai-discovery@example.com",
-    "issuesUrl": "https://github.com/example/ai-discovery/issues"
+    "email": "ai-support@example.com",
+    "issuesUrl": "https://github.com/example/issues"
   }
 }
 ```
 
-**Required Fields:**
-- `version` (string): Semantic version of ai-discovery.json format
-- `generatedAt` (string): ISO 8601 timestamp
-- `website.url` (string): Canonical URL of the website
-
-**Optional Fields:**
-- `endpoints.*`: References to other discovery files
-- `capabilities.*`: Feature support flags
-- `contact.*`: Technical contact information
+**Headers:**
+```
+Content-Type: application/json
+ETag: W/"abc123"
+Cache-Control: public, max-age=3600
+X-Update-Frequency: daily
+```
 
 ---
 
-### 4.2 knowledge-graph.json (Entity Catalog)
+### 4.2 `/knowledge-graph.json` (Recommended)
 
-**Purpose:** Structured catalog of all entities on the site using Schema.org vocabularies.
+Schema.org entity catalog in JSON-LD format.
 
-**Location:** `https://example.com/knowledge-graph.json`
-
-**HTTP Headers:**
-```http
-Content-Type: application/ld+json
-Cache-Control: public, max-age=3600, stale-while-revalidate=86400
-Last-Modified: Sat, 02 Nov 2025 11:30:00 GMT
-ETag: "2.1.5"
-```
-
-**Schema:**
+**Response:**
 
 ```json
 {
   "@context": "https://schema.org",
-  "@type": "KnowledgeGraph",
-  "version": "2.1.5",
-  "generatedAt": "2025-11-02T11:30:00Z",
-  "changeLog": {
-    "lastModified": "2025-11-02T11:30:00Z",
-    "changes": [
-      {
-        "timestamp": "2025-11-02T11:30:00Z",
-        "entityType": "Product",
-        "entityId": "https://example.com/products/widget-pro",
-        "changeType": "updated",
-        "modifiedFields": ["price", "availability"]
-      },
-      {
-        "timestamp": "2025-11-01T09:15:00Z",
-        "entityType": "NewsArticle",
-        "entityId": "https://example.com/news/product-launch",
-        "changeType": "created"
-      }
-    ]
-  },
-  "statistics": {
-    "totalEntities": 132,
-    "byType": {
-      "Organization": 1,
-      "Product": 45,
-      "NewsArticle": 78,
-      "Person": 5,
-      "FAQPage": 3
-    }
-  },
   "@graph": [
     {
       "@type": "Organization",
@@ -246,505 +181,543 @@ ETag: "2.1.5"
       "name": "Example Corporation",
       "url": "https://example.com",
       "logo": "https://example.com/logo.png",
+      "description": "Leading provider of example services",
       "sameAs": [
         "https://twitter.com/example",
         "https://linkedin.com/company/example"
-      ],
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "contactType": "Customer Service",
-        "email": "support@example.com"
-      }
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://example.com/#website",
+      "name": "Example",
+      "url": "https://example.com",
+      "publisher": {"@id": "https://example.com/#organization"}
     },
     {
       "@type": "Product",
-      "@id": "https://example.com/products/widget-pro",
-      "name": "Widget Pro",
-      "description": "Professional-grade widget",
-      "brand": {
-        "@id": "https://example.com/#organization"
-      },
+      "@id": "https://example.com/product#product",
+      "name": "Example Product",
+      "description": "Our flagship product",
       "offers": {
         "@type": "Offer",
-        "price": "299.00",
-        "priceCurrency": "USD",
-        "availability": "https://schema.org/InStock"
-      }
-    },
-    {
-      "@type": "NewsArticle",
-      "@id": "https://example.com/news/product-launch",
-      "headline": "Example Corp Launches Widget Pro",
-      "datePublished": "2025-11-01T09:00:00Z",
-      "author": {
-        "@type": "Organization",
-        "@id": "https://example.com/#organization"
-      },
-      "publisher": {
-        "@id": "https://example.com/#organization"
-      },
-      "url": "https://example.com/news/product-launch"
-    }
-  ]
-}
-```
-
-**Required Fields:**
-- `@context` (string): Must be `https://schema.org`
-- `@type` (string): Must be `KnowledgeGraph`
-- `@graph` (array): Array of Schema.org entities
-
-**Recommended Fields:**
-- `version` (string): Semantic version for change tracking
-- `generatedAt` (string): ISO 8601 timestamp
-- `changeLog` (object): Recent changes for incremental updates
-- `statistics` (object): Entity counts by type
-
-**Change Types:**
-- `created`: New entity added
-- `updated`: Existing entity modified
-- `deleted`: Entity removed (tombstone record)
-
----
-
-### 4.3 llms.txt (Context Document)
-
-**Purpose:** Human-readable Markdown document providing context for AI systems.
-
-**Location:** `https://example.com/llms.txt`
-
-**Format:** Markdown with frontmatter metadata
-
-**HTTP Headers:**
-```http
-Content-Type: text/markdown; charset=utf-8
-Cache-Control: public, max-age=86400
-Last-Modified: Fri, 01 Nov 2025 10:00:00 GMT
-```
-
-**Structure:**
-
-```markdown
----
-version: 1.0.0
-lastModified: 2025-11-01T10:00:00Z
----
-
-# Example Corporation
-
-> AI-Optimized Content for Large Language Models
-
-## Overview
-
-Example Corporation is a leading provider of professional widgets and widget-related services. Founded in 2020, we serve over 10,000 customers worldwide.
-
-## Products
-
-### Widget Pro
-- **Price:** $299 USD
-- **Features:** Advanced automation, real-time analytics, API access
-- **Use Cases:** Enterprise widget management, scalable deployments
-
-### Widget Lite
-- **Price:** $49 USD
-- **Features:** Basic automation, simple interface
-- **Use Cases:** Small teams, individual users
-
-## Recent Press Releases
-
-### Product Launch: Widget Pro v2.0 (November 1, 2025)
-Example Corp today announced Widget Pro v2.0 with AI-powered automation...
-
-Read more: https://example.com/news/product-launch
-
-## Contact
-
-- **Website:** https://example.com
-- **Email:** support@example.com
-- **Documentation:** https://docs.example.com
-
----
-*Last updated: November 1, 2025*
-```
-
-**Best Practices:**
-- Use clear headings (H1, H2, H3)
-- Include recent updates (press releases, product launches)
-- Link to full articles for detailed information
-- Keep total length under 100KB (context window limits)
-- Update weekly or when major changes occur
-
----
-
-### 4.4 robots.txt (Crawler Directives)
-
-**Purpose:** Standard robots.txt with AI discovery enhancement.
-
-**Location:** `https://example.com/robots.txt`
-
-**Format:**
-
-```
-# AI Discovery Protocol
-# Learn more: https://github.com/pressonify/ai-discovery-protocol
-
-# AI-Optimized Endpoints
-Allow: /ai-discovery.json
-Allow: /knowledge-graph.json
-Allow: /llms.txt
-
-# Sitemap
-Sitemap: https://example.com/sitemap.xml
-
-# Standard crawler rules
-User-agent: *
-Allow: /
-
-User-agent: GPTBot
-Allow: /
-
-User-agent: ChatGPT-User
-Allow: /
-
-User-agent: Claude-Web
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-```
-
-**AI-Specific Directives:**
-- Explicitly allow AI-optimized endpoints
-- Reference AI Discovery Protocol documentation
-- List AI crawler user-agents
-
----
-
-## 5. Implementation Levels
-
-Sites can implement ADP at three levels:
-
-### Level 1: Minimal (Entry Point Only)
-
-**Required:**
-- `/ai-discovery.json` with basic metadata
-
-**Benefits:**
-- Signals AI-friendly intent
-- Provides site overview
-- Low implementation effort
-
-**Example:**
-```json
-{
-  "version": "1.0.0",
-  "generatedAt": "2025-11-02T12:00:00Z",
-  "website": {
-    "url": "https://example.com",
-    "name": "Example Corp",
-    "description": "Professional widget provider"
-  }
-}
-```
-
----
-
-### Level 2: Standard (Recommended)
-
-**Required:**
-- `/ai-discovery.json` (meta-index)
-- `/knowledge-graph.json` (entity catalog)
-- `/llms.txt` (context document)
-
-**Benefits:**
-- Full AI discoverability
-- Structured entity catalog
-- Human-readable context
-- Competitive advantage
-
----
-
-### Level 3: Advanced (Future-Proof)
-
-**Required:**
-- All Level 2 files
-- Versioning in `knowledge-graph.json`
-- Change log for incremental updates
-- Custom endpoints referenced in `ai-discovery.json`
-
-**Benefits:**
-- Incremental crawling support
-- Cache invalidation optimization
-- Extensibility for future features
-
----
-
-## 6. Examples
-
-### Example 1: E-commerce Site (Shopify Store)
-
-**ai-discovery.json:**
-```json
-{
-  "version": "1.0.0",
-  "generatedAt": "2025-11-02T12:00:00Z",
-  "website": {
-    "url": "https://mystore.com",
-    "name": "My Awesome Store",
-    "description": "Handcrafted artisan products"
-  },
-  "endpoints": {
-    "knowledgeGraph": {
-      "url": "https://mystore.com/knowledge-graph.json",
-      "format": "application/ld+json",
-      "entityCount": 250,
-      "version": "1.0.0"
-    },
-    "contextDocument": {
-      "url": "https://mystore.com/llms.txt",
-      "format": "text/markdown"
-    }
-  },
-  "capabilities": {
-    "supportsVersioning": true,
-    "updateFrequency": "daily"
-  }
-}
-```
-
-**knowledge-graph.json:**
-```json
-{
-  "@context": "https://schema.org",
-  "@type": "KnowledgeGraph",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": "https://mystore.com/#organization",
-      "name": "My Awesome Store",
-      "url": "https://mystore.com"
-    },
-    {
-      "@type": "Product",
-      "@id": "https://mystore.com/products/handmade-mug",
-      "name": "Handmade Ceramic Mug",
-      "offers": {
-        "@type": "Offer",
-        "price": "24.99",
+        "price": "99.00",
         "priceCurrency": "USD"
       }
     }
+  ],
+  "adp:version": "2.7.1",
+  "adp:entityCount": 3,
+  "adp:lastUpdated": "2026-01-08T12:00:00Z"
+}
+```
+
+---
+
+### 4.3 `/llms.txt` (Recommended)
+
+Human-readable Markdown context document optimized for AI processing.
+
+**Format:** Markdown
+**Size:** 1-2KB (standard), 50KB+ (full), 200 bytes (lite)
+
+**Example:**
+
+```markdown
+# Example Corporation
+
+> Leading provider of example services since 2020
+
+## Overview
+
+Example Corporation helps businesses achieve their goals through innovative solutions.
+
+## Products
+
+- **Product A** - Description of product A
+- **Product B** - Description of product B
+
+## Contact
+
+- Website: https://example.com
+- Email: hello@example.com
+
+---
+*AI Discovery Protocol v2.1 | Updated: 2026-01-08*
+```
+
+---
+
+### 4.4 `/feed.json` (Optional)
+
+JSON Feed v1.1 format for content updates.
+
+**Response:**
+
+```json
+{
+  "version": "https://jsonfeed.org/version/1.1",
+  "title": "Example Corporation Updates",
+  "home_page_url": "https://example.com",
+  "feed_url": "https://example.com/feed.json",
+  "description": "Latest updates from Example Corporation",
+  "items": [
+    {
+      "id": "https://example.com/post/123",
+      "url": "https://example.com/post/123",
+      "title": "New Product Launch",
+      "content_text": "We're excited to announce...",
+      "date_published": "2026-01-08T12:00:00Z",
+      "authors": [{"name": "Example Team"}]
+    }
   ]
 }
 ```
 
 ---
 
-### Example 2: SaaS Company (Pressonify.ai)
+### 4.5 `/updates.json` (Optional)
 
-**ai-discovery.json:**
+Recent content changes for incremental crawling.
+
+**Response:**
+
 ```json
 {
-  "version": "1.0.0",
-  "generatedAt": "2025-11-02T12:00:00Z",
-  "website": {
-    "url": "https://pressonify.ai",
-    "name": "Pressonify.ai",
-    "description": "AI-powered press release platform with 60-second publishing"
-  },
-  "endpoints": {
-    "knowledgeGraph": {
-      "url": "https://pressonify.ai/knowledge-graph.json",
-      "format": "application/ld+json",
-      "lastModified": "2025-11-02T11:30:00Z",
-      "entityCount": 132,
-      "version": "2.7.1"
+  "version": "2.1",
+  "generatedAt": "2026-01-08T12:00:00Z",
+  "updateWindow": "7d",
+  "updates": [
+    {
+      "url": "/post/123",
+      "type": "created",
+      "timestamp": "2026-01-08T12:00:00Z",
+      "title": "New Post"
     },
-    "contextDocument": {
-      "url": "https://pressonify.ai/llms.txt",
-      "format": "text/markdown",
-      "lastModified": "2025-11-01T10:00:00Z"
-    },
-    "crawlerDirectives": {
-      "url": "https://pressonify.ai/robots.txt",
-      "allowsAI": true
+    {
+      "url": "/product/456",
+      "type": "modified",
+      "timestamp": "2026-01-07T10:00:00Z",
+      "changeType": "price_update"
     }
-  },
-  "capabilities": {
-    "supportsVersioning": true,
-    "supportsIncrementalUpdates": true,
-    "supportsChangeDetection": true,
-    "updateFrequency": "daily"
-  },
-  "contact": {
-    "email": "ai-discovery@pressonify.ai"
-  }
+  ]
 }
 ```
 
 ---
 
-### Example 3: Blog/Publisher
+### 4.6 `/ai-sitemap.xml` (Optional)
 
-**ai-discovery.json:**
+AI-optimized XML sitemap with priority hints.
+
+**Response:**
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:ai="https://ai-discovery-protocol.org/sitemap">
+  <url>
+    <loc>https://example.com/</loc>
+    <lastmod>2026-01-08</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <ai:content-type>homepage</ai:content-type>
+  </url>
+  <url>
+    <loc>https://example.com/products</loc>
+    <lastmod>2026-01-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <ai:content-type>catalog</ai:content-type>
+  </url>
+</urlset>
+```
+
+---
+
+### 4.7 `/.well-known/ai.json` (Optional)
+
+Standardized well-known location for AI discovery.
+
+**Response:** Same format as `/ai-discovery.json`
+
+---
+
+### 4.8 `/opensearch.xml` (Optional)
+
+Browser search plugin integration.
+
+**Response:**
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+  <ShortName>Example</ShortName>
+  <Description>Search Example Corporation</Description>
+  <Url type="text/html" template="https://example.com/search?q={searchTerms}"/>
+  <Image>https://example.com/favicon.ico</Image>
+</OpenSearchDescription>
+```
+
+---
+
+### 4.9 `/api/webhooks/discovery` (Optional)
+
+Webhook registration endpoint for real-time updates.
+
+**Response:**
+
 ```json
 {
-  "version": "1.0.0",
-  "generatedAt": "2025-11-02T12:00:00Z",
-  "website": {
-    "url": "https://techblog.com",
-    "name": "Tech Blog Daily",
-    "description": "Latest technology news and analysis"
-  },
-  "endpoints": {
-    "knowledgeGraph": {
-      "url": "https://techblog.com/knowledge-graph.json",
-      "format": "application/ld+json",
-      "entityCount": 500
+  "version": "2.1",
+  "webhooks": {
+    "contentUpdates": {
+      "url": "/api/webhooks/content",
+      "events": ["content.created", "content.updated", "content.deleted"],
+      "format": "json"
     },
-    "contextDocument": {
-      "url": "https://techblog.com/llms.txt",
-      "format": "text/markdown"
+    "indexNow": {
+      "url": "/api/webhooks/indexnow",
+      "events": ["index.requested"],
+      "format": "json"
     }
-  }
+  },
+  "documentation": "https://example.com/docs/webhooks"
 }
 ```
 
-**knowledge-graph.json (truncated):**
+---
+
+## 5. HTTP Headers
+
+All ADP endpoints SHOULD include these headers:
+
+### 5.1 Required Headers
+
+| Header | Purpose | Example |
+|--------|---------|---------|
+| `Content-Type` | Media type | `application/json` |
+| `ETag` | Cache validation | `W/"abc123"` |
+
+### 5.2 Recommended Headers
+
+| Header | Purpose | Example |
+|--------|---------|---------|
+| `Content-Digest` | Integrity verification | `sha-256=base64hash` |
+| `X-Update-Frequency` | Crawler scheduling | `daily`, `weekly`, `monthly` |
+| `Cache-Control` | Caching directives | `public, max-age=3600` |
+| `Last-Modified` | Last update timestamp | `Wed, 08 Jan 2026 12:00:00 GMT` |
+
+### 5.3 CORS Headers
+
+For cross-origin AI tool access:
+
+```
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, OPTIONS
+Access-Control-Allow-Headers: Content-Type
+```
+
+---
+
+## 6. News Namespace
+
+The `/news/` namespace provides specialized endpoints for news publishers and content sites.
+
+### 6.1 `/news/llms.txt`
+
+News-specific context document focusing on recent content.
+
+**Example:**
+
+```markdown
+# Example News
+
+> Breaking news and updates from Example Corporation
+
+## Recent Headlines
+
+1. **New Product Launch** (Jan 8, 2026)
+   We announced our latest product today...
+
+2. **Q4 2025 Results** (Jan 5, 2026)
+   Record revenue of $10M...
+
+## Categories
+
+- Technology
+- Business
+- Product Updates
+
+---
+*AI Discovery Protocol v2.1 | News Feed*
+```
+
+---
+
+### 6.2 `/news/speakable.json`
+
+Voice assistant-optimized content using Schema.org Speakable.
+
+**Response:**
+
 ```json
 {
   "@context": "https://schema.org",
-  "@type": "KnowledgeGraph",
-  "statistics": {
-    "totalEntities": 500,
-    "byType": {
-      "NewsArticle": 450,
-      "Person": 30,
-      "Organization": 20
-    }
+  "@type": "WebPage",
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": [".headline", ".summary"]
   },
-  "@graph": [
+  "items": [
     {
-      "@type": "NewsArticle",
-      "@id": "https://techblog.com/ai-trends-2025",
-      "headline": "Top AI Trends for 2025",
-      "datePublished": "2025-11-01T09:00:00Z",
-      "author": {
-        "@type": "Person",
-        "name": "Jane Smith"
-      }
+      "headline": "New Product Launch",
+      "speakableText": "Example Corporation announced a new product today. The product features...",
+      "url": "https://example.com/news/product-launch",
+      "datePublished": "2026-01-08T12:00:00Z"
     }
   ]
 }
+```
+
+---
+
+### 6.3 `/news/changelog.json`
+
+Platform version history and updates.
+
+**Response:**
+
+```json
+{
+  "version": "2.1",
+  "platform": "Example Platform",
+  "changelog": [
+    {
+      "version": "2.1.0",
+      "date": "2026-01-08",
+      "changes": [
+        "Added news namespace",
+        "Improved AI crawler support",
+        "New speakable content endpoint"
+      ]
+    },
+    {
+      "version": "2.0.0",
+      "date": "2025-12-01",
+      "changes": [
+        "HTTP security headers",
+        "Capabilities object",
+        "8-factor scoring"
+      ]
+    }
+  ]
+}
+```
+
+---
+
+### 6.4 `/news/archive.jsonl`
+
+Historical content in JSONL streaming format for efficient processing.
+
+**Response:**
+
+```
+{"id":"123","title":"Post 1","date":"2026-01-08","url":"/news/post-1"}
+{"id":"124","title":"Post 2","date":"2026-01-07","url":"/news/post-2"}
+{"id":"125","title":"Post 3","date":"2026-01-06","url":"/news/post-3"}
 ```
 
 ---
 
 ## 7. Security Considerations
 
-### 7.1 Data Exposure
-- **Public by design**: All ADP files are publicly accessible
-- **Sensitive data**: Do NOT include private information, credentials, or internal URLs
-- **Rate limiting**: Implement rate limits on endpoints to prevent abuse
+### 7.1 Content Integrity
 
-### 7.2 CORS Headers
-```http
-Access-Control-Allow-Origin: *
-Access-Control-Allow-Methods: GET, HEAD, OPTIONS
+Use `Content-Digest` header with SHA-256 hash:
+
+```
+Content-Digest: sha-256=X48E9qOokqqrvdts8nOJRJN3OWDUoyWxBf7kbu9DBPE=
 ```
 
-### 7.3 Content Security
-- Validate JSON-LD against Schema.org vocabularies
-- Escape user-generated content properly
-- Use HTTPS for all endpoints
+### 7.2 Rate Limiting
 
-### 7.4 Denial of Service
-- Set maximum file sizes (recommended: 10MB for knowledge-graph.json)
-- Implement caching with appropriate TTLs
-- Use CDN for static files
+Implement rate limiting for API endpoints:
+- Recommended: 60 requests/minute per IP
+- Return `429 Too Many Requests` when exceeded
+
+### 7.3 Authentication (Optional)
+
+For private/premium content:
+- Use Bearer tokens in `Authorization` header
+- Document authentication in `/ai-discovery.json`
+
+### 7.4 robots.txt Directives
+
+Always honor `robots.txt` directives. ADP-compliant sites should explicitly allow AI crawlers:
+
+```
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+```
 
 ---
 
-## 8. Future Extensions
+## 8. Implementation Levels
 
-### 8.1 Planned Features (v1.1)
-- **Entity pagination**: Support for large knowledge graphs (>10,000 entities)
-- **Real-time updates**: WebSocket endpoint for live changes
-- **Multi-language support**: Localized entity catalogs
+### Level 1: Minimal
+- `/ai-discovery.json` only
+- 15 minutes to implement
 
-### 8.2 Potential Extensions (v2.0)
-- **Entity relationships graph**: Explicit relationship mapping beyond Schema.org
-- **Query endpoint**: GraphQL-like query interface
-- **Federated discovery**: Cross-domain entity references
+### Level 2: Standard (Recommended)
+- `/ai-discovery.json`
+- `/knowledge-graph.json`
+- `/llms.txt`
+- `/robots.txt`
+- 2-4 hours to implement
 
-### 8.3 Community Contributions
-We welcome community feedback and proposals for future extensions. Please submit issues or pull requests to the GitHub repository.
+### Level 3: Advanced
+- All Level 2 files
+- `/feed.json`
+- `/updates.json`
+- HTTP security headers
+- 1-2 days to implement
+
+### Level 4: Enterprise
+- All Level 3 files
+- News namespace (`/news/*`)
+- Proof infrastructure
+- Citation tracking
+- 1-2 weeks to implement
 
 ---
 
-## 9. References
+## 9. Proof Infrastructure
 
-### Standards
-- [Schema.org](https://schema.org/) - Structured data vocabularies
-- [JSON-LD 1.1](https://www.w3.org/TR/json-ld11/) - JSON-based Serialization for Linked Data
-- [RFC 9309: Robots Exclusion Protocol](https://www.rfc-editor.org/rfc/rfc9309.html)
-- [Sitemaps Protocol](https://www.sitemaps.org/protocol.html)
-- [RFC 3339: Date and Time on the Internet](https://www.rfc-editor.org/rfc/rfc3339)
+### 9.1 Crawler Hit Logging
 
-### Related Work
-- [llms.txt Proposal](https://llmstxt.org/) by Jeremy Howard (Answer.AI)
-- [Google Enterprise Knowledge Graph](https://cloud.google.com/enterprise-knowledge-graph)
-- [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) by Anthropic
+Track visits from AI crawlers to measure discoverability:
 
-### Resources
-- **GitHub Repository**: https://github.com/pressonify/ai-discovery-protocol
-- **JSON Schema**: https://pressonify.ai/schemas/ai-discovery/v1.0.json
-- **Validation Tool**: https://pressonify.ai/tools/adp-validator
-- **Discussion Forum**: https://github.com/pressonify/ai-discovery-protocol/discussions
+**Tracked Crawlers:**
+- GPTBot (OpenAI)
+- ClaudeBot (Anthropic)
+- PerplexityBot (Perplexity)
+- Google-Extended (Google AI)
+- Amazonbot (Amazon)
+- Bytespider (ByteDance)
+- cohere-ai (Cohere)
+- Meta-ExternalAgent (Meta)
+
+**Implementation:**
+```python
+AI_CRAWLERS = [
+    "GPTBot", "ClaudeBot", "PerplexityBot",
+    "Google-Extended", "Amazonbot", "anthropic-ai"
+]
+
+def log_crawler_hit(request):
+    user_agent = request.headers.get("User-Agent", "")
+    for crawler in AI_CRAWLERS:
+        if crawler.lower() in user_agent.lower():
+            # Log to analytics
+            track_event("adp_crawler_hit", {
+                "crawler": crawler,
+                "endpoint": request.path,
+                "timestamp": datetime.utcnow()
+            })
+```
+
+### 9.2 Citation Detection
+
+Monitor when AI systems cite your content:
+
+**Detection Methods:**
+1. **Query-based**: Search AI platforms for your brand/content
+2. **API-based**: Use Perplexity API for citation scanning
+3. **Manual verification**: Periodic spot checks
+
+**Metrics:**
+- Total citations per period
+- Citations by platform (ChatGPT, Perplexity, Claude)
+- Time-to-citation (publish → first cite)
+- Citation rate (citations / published content)
+
+### 9.3 ROI Attribution
+
+Connect citations back to source content:
+
+```json
+{
+  "citation": {
+    "id": "cite_123",
+    "platform": "perplexity",
+    "query": "best press release platform",
+    "citedUrl": "https://example.com/post/123",
+    "discoveredAt": "2026-01-08T12:00:00Z"
+  },
+  "attribution": {
+    "sourceContentId": "post_123",
+    "publishedAt": "2026-01-05T10:00:00Z",
+    "timeToCitation": "3 days",
+    "confidence": 0.95
+  }
+}
+```
+
+---
+
+## 10. Migration Guide
+
+### From v1.0 to v2.1
+
+1. **Update version number**
+   ```json
+   "version": "2.1"
+   ```
+
+2. **Add capabilities object**
+   ```json
+   "capabilities": {
+     "supportsVersioning": true,
+     "supportsIncrementalUpdates": true,
+     "updateFrequency": "daily"
+   }
+   ```
+
+3. **Add HTTP headers** to all endpoints
+
+4. **Optionally add** news namespace and proof infrastructure
+
+### Backwards Compatibility
+
+ADP v2.1 is backwards compatible with v1.0:
+- v1.0 clients can read v2.1 responses (ignore new fields)
+- v2.1 servers can serve v1.0 clients (core fields unchanged)
+
+---
+
+## References
+
+- [Schema.org](https://schema.org) - Vocabulary standard
+- [JSON-LD](https://json-ld.org) - Linked data format
+- [JSON Feed](https://jsonfeed.org) - Feed format
+- [robots.txt](https://www.robotstxt.org) - Crawler directives
+- [HTTP Caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching) - Cache headers
 
 ---
 
 ## License
 
-This specification is released under the **MIT License**.
-
-```
-Copyright (c) 2025 Pressonify.ai
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
+This specification is released under the MIT License.
 
 ---
 
-## Changelog
-
-### Version 1.0.0 (November 2, 2025)
-- Initial specification release
-- Core architecture: ai-discovery.json, knowledge-graph.json, llms.txt, robots.txt
-- Versioning and change detection support
-- Three implementation levels (Minimal, Standard, Advanced)
-- Comprehensive examples and security guidelines
-
----
-
-**Published by:** [Pressonify.ai](https://pressonify.ai)
-**Contributors:** Robert Porter, Claude (Anthropic)
-**Last Updated:** November 2, 2025
-
-*We welcome feedback, contributions, and implementations of this standard. Please join the discussion at our GitHub repository.*
+*AI Discovery Protocol v2.1 - January 2026*
+*Maintained by [Pressonify](https://pressonify.ai)*

@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2025 Pressonify.ai
+Copyright (c) 2025 Robert Porter / Pressonify.ai
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +19,31 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+ATTRIBUTION REQUIREMENT
+
+Derivative works, forks, and implementations must include visible attribution
+to the original project in their README or equivalent documentation:
+
+"Based on AI Discovery Protocol (ADP) by Robert Porter / Pressonify.ai
+https://github.com/BuddySpuds/AI-Discovery-Protocol"
+
+This attribution requirement applies to:
+- Forked repositories
+- Derivative specifications
+- Tools and libraries implementing ADP
+- Documentation describing ADP-based systems
+
+---
+
+TRADEMARK NOTICE
+
+"AI Discovery Protocol" and "ADP" are trademarks of Robert Porter / Pressonify.ai.
+See INTELLECTUAL_PROPERTY.md for full trademark policy and permitted uses.
+
+PATENT GRANT
+
+A perpetual, royalty-free patent license is granted for implementing this
+specification. See INTELLECTUAL_PROPERTY.md for full patent policy.

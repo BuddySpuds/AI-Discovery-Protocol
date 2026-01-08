@@ -7,7 +7,97 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.1] - 2026-01-08
+
+### News AI Discoverability Sprint
+
+Major expansion from 11 to 17 endpoints with new capabilities for news publishers and proof infrastructure.
+
+### Added
+
+**News Namespace (`/news/*`)**
+- `/news/llms.txt` - News-specific AI context document
+- `/news/speakable.json` - Voice assistant-optimized content (Schema.org Speakable)
+- `/news/changelog.json` - Platform version history tracking
+- `/news/archive.jsonl` - Historical content in JSONL streaming format
+
+**New Endpoints**
+- `/opensearch.xml` - Browser search plugin integration
+- `/api/webhooks/discovery` - Webhook registration endpoint
+- `/llms-lite.txt` - Minimal context (~200 bytes)
+- `/llms-full.txt` - Comprehensive context (50KB+)
+
+**Proof Infrastructure**
+- AI crawler hit logging (GPTBot, ClaudeBot, PerplexityBot, etc.)
+- Citation detection via Perplexity API
+- ROI attribution (citations → source content)
+- Public stats API (`/api/v1/adp/stats`)
+- Daily citation reports with wide-net query strategy
+
+**Documentation**
+- `docs/NEWS_NAMESPACE.md` - News publisher implementation guide
+- `docs/PROOF_INFRASTRUCTURE.md` - Citation tracking documentation
+
+### Changed
+
+- Endpoint count: 11 → 17
+- Implementation levels: 3 → 4 (added Enterprise tier with citation tracking)
+- Reference implementation updated to Pressonify.ai v2.9.6
+
+---
+
+## [2.0] - 2025-12-08
+
+### HTTP Security & Capabilities
+
+Enhanced protocol with HTTP headers and capabilities declaration.
+
+### Added
+
+**HTTP Security Headers**
+- `ETag` - Cache validation
+- `Content-Digest: sha-256=...` - Integrity verification
+- `X-Update-Frequency` - Crawler scheduling hints (daily/weekly/monthly)
+- `Access-Control-Allow-Origin: *` - CORS support for AI tools
+
+**Capabilities Object**
+```json
+"capabilities": {
+  "supportsVersioning": true,
+  "supportsIncrementalUpdates": true,
+  "supportsChangeDetection": true,
+  "updateFrequency": "daily"
+}
+```
+
+**Contact Object**
+```json
+"contact": {
+  "email": "ai-support@example.com",
+  "issuesUrl": "https://github.com/example/issues"
+}
+```
+
+**New Endpoints**
+- `/.well-known/ai.json` - Standardized well-known location
+- `/feed.json` - JSON Feed v1.1 format
+- `/updates.json` - Recent content changes
+- `/ai-sitemap.xml` - AI-optimized sitemap
+- `/ai-discovery.md` - Human-readable discovery doc
+
+### Changed
+
+- Version format: `1.0.0` → `2.0` (simplified major.minor)
+- Endpoint count: 4 → 11
+- CORS enabled on all endpoints by default
+
+---
+
 ## [1.0.0] - 2025-11-05
+
+### Initial Release
+
+First public release of the AI Discovery Protocol specification.
 
 ### Added
 - **Initial specification release** — Complete technical specification (13,500 words)
@@ -56,28 +146,69 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [Unreleased]
+## Version Comparison
 
-### Planned for v1.1.0
-- Entity pagination for large knowledge graphs (>10,000 entities)
-- Real-time updates via WebSocket endpoint
-- Multi-language support and localization
-- Official JSON Schema validation files
-- Validation tools (Python, JavaScript, CLI)
-- Additional platform implementations (WordPress, Drupal, Shopify)
+| Feature | v1.0 | v2.0 | v2.1 |
+|---------|------|------|------|
+| Endpoints | 4 | 11 | 17 |
+| News Namespace | - | - | ✓ |
+| HTTP Headers | - | ✓ | ✓ |
+| Proof Infrastructure | - | - | ✓ |
+| Capabilities Object | - | ✓ | ✓ |
+| CORS Support | - | ✓ | ✓ |
+| Tiered Content | - | - | ✓ |
+| Voice Optimization | - | - | ✓ |
+| Citation Tracking | - | - | ✓ |
 
-### Under Consideration for v2.0.0
-- Federated discovery (cross-domain entity references)
-- GraphQL-like query endpoint
-- Advanced relationship mapping beyond Schema.org
-- Real-time change feeds
-- Subscription model for updates
+---
+
+## Migration Notes
+
+### v1.0 → v2.0
+
+1. Update version in `ai-discovery.json`:
+   ```json
+   "version": "2.0"
+   ```
+
+2. Add capabilities object
+
+3. Add HTTP headers to all endpoints
+
+4. (Optional) Add new endpoints: `/.well-known/ai.json`, `/feed.json`
+
+### v2.0 → v2.1
+
+1. Update version:
+   ```json
+   "version": "2.1"
+   ```
+
+2. (Optional) Add news namespace if publishing news content
+
+3. (Optional) Implement proof infrastructure for ROI tracking
+
+4. (Optional) Add tiered content (`/llms-lite.txt`, `/llms-full.txt`)
 
 ---
 
 ## Release Notes
 
-### v1.0.0 Highlights
+### v2.1 Highlights
+
+**Why v2.1?**
+- Prove ADP effectiveness with crawler tracking and citation detection
+- Voice assistant optimization for smart speakers
+- News-specific content for publishers
+- Historical archives in efficient streaming format
+
+**Key Benefits:**
+- **Measurable ROI:** Track AI crawler visits and citations
+- **Voice-ready:** Speakable content for Alexa, Google Assistant, Siri
+- **News optimized:** Dedicated namespace for time-sensitive content
+- **Streaming archives:** Efficient JSONL format for large datasets
+
+### v1.0 Highlights
 
 **Why ADP?**
 Traditional SEO was designed for keyword-based crawlers. AI systems (ChatGPT, Claude, Perplexity, Gemini) need structured entity catalogs, freshness signals, and context-optimized documents. ADP provides a standard discovery protocol for the AI era.
@@ -99,4 +230,6 @@ See [QUICK_START.md](QUICK_START.md) for implementation guides.
 
 ---
 
+[2.1]: https://github.com/BuddySpuds/AI-Discovery-Protocol/releases/tag/v2.1
+[2.0]: https://github.com/BuddySpuds/AI-Discovery-Protocol/releases/tag/v2.0
 [1.0.0]: https://github.com/BuddySpuds/AI-Discovery-Protocol/releases/tag/v1.0.0
