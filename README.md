@@ -3,8 +3,11 @@
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/Version-2.1-green.svg)](CHANGELOG.md)
 [![Standard](https://img.shields.io/badge/Status-Production-success.svg)](SPECIFICATION.md)
+[![Results](https://img.shields.io/badge/Results-View%20Data-orange.svg)](RESULTS.md)
 
 **Making websites discoverable to AI systems (ChatGPT, Claude, Perplexity, Gemini)**
+
+> **Real Results:** ADP implementations achieve **2.4 day average time to first AI citation** with **100% citation detection rate**. [View anonymized customer data →](RESULTS.md)
 
 ---
 
@@ -261,11 +264,32 @@ Test these production endpoints:
 | Document | Description |
 |----------|-------------|
 | [SPECIFICATION.md](SPECIFICATION.md) | Complete protocol specification |
+| [RESULTS.md](RESULTS.md) | **Real citation outcomes (anonymized)** |
 | [QUICK_START.md](QUICK_START.md) | Implementation guide |
 | [docs/NEWS_NAMESPACE.md](docs/NEWS_NAMESPACE.md) | News publisher guide |
 | [docs/PROOF_INFRASTRUCTURE.md](docs/PROOF_INFRASTRUCTURE.md) | Citation tracking |
 | [docs/HTTP_HEADERS.md](docs/HTTP_HEADERS.md) | Security headers guide |
 | [FAQ.md](FAQ.md) | Frequently asked questions |
+
+---
+
+## Proven Results
+
+ADP isn't just a specification—it's a **proven system** with measurable outcomes.
+
+| Metric | Result |
+|--------|--------|
+| Average time to first AI citation | **2.4 days** |
+| Citation detection rate | **100%** |
+| AI crawler visits (30-day sample) | **1,200+** |
+| AI platforms citing content | **4** (Perplexity, ChatGPT, Claude, Gemini) |
+
+**Case study highlights:**
+- B2B SaaS company: 12 → 847 crawler visits/month, first citation in 18 hours
+- E-commerce brand: Cited in direct brand queries within 72 hours
+- Healthcare startup: 1,100+ crawler visits/month with FDA approval content
+
+👉 **[View Full Results →](RESULTS.md)** — Anonymized data from real ADP implementations
 
 ---
 
@@ -285,7 +309,7 @@ Test these production endpoints:
 
 | Version | Date | Changes |
 |---------|------|---------|
-| **2.1** | Jan 2026 | News namespace, 17 endpoints, proof infrastructure |
+| **2.1** | Jan 2026 | News namespace, 20 endpoints, proof infrastructure |
 | 2.0 | Dec 2025 | HTTP headers, capabilities object, 8-factor scoring |
 | 1.0 | Nov 2025 | Initial release, 4-file architecture |
 
