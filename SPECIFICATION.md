@@ -1,10 +1,10 @@
-# AI Discovery Protocol (ADP) v2.1
+# AI Discovery Protocol (ADP) v3.0
 
 ## Complete Specification
 
 **Status:** Production Specification
-**Version:** 2.1
-**Published:** January 8, 2026
+**Version:** 3.0
+**Published:** January 12, 2026
 **Author:** Pressonify.ai
 **License:** MIT License
 
@@ -21,7 +21,8 @@
 7. [Security Considerations](#7-security-considerations)
 8. [Implementation Levels](#8-implementation-levels)
 9. [Proof Infrastructure](#9-proof-infrastructure)
-10. [Migration Guide](#10-migration-guide)
+10. [MCP Integration (Level 4)](#10-mcp-integration-level-4---optional)
+11. [Migration Guide](#11-migration-guide)
 
 ---
 
@@ -29,12 +30,17 @@
 
 The AI Discovery Protocol (ADP) is an open standard that enables websites to make their content discoverable and understandable to AI systems (LLMs, AI search engines, reasoning engines, and AI agents). Unlike traditional SEO which optimizes for keyword-based search crawlers, ADP provides structured, machine-readable metadata specifically designed for AI reasoning systems.
 
-ADP v2.1 introduces:
-- **20 endpoint architecture** (expanded from 4 in v1.0)
-- **News namespace** for publishers and news content
-- **Proof infrastructure** for tracking AI crawler visits and citations
-- **HTTP security headers** for cache validation and integrity verification
-- **Tiered content** for different AI system needs
+ADP v3.0 introduces:
+- **MCP Integration** (Model Context Protocol) for AI agent interactions
+- **22 endpoint architecture** (expanded from 20 in v2.1)
+- **Agent capabilities declaration** via `/.well-known/agents.json`
+- **Tool advertisement** via `/mcp.json`
+
+Previous features (v2.1):
+- News namespace for publishers and news content
+- Proof infrastructure for tracking AI crawler visits and citations
+- HTTP security headers for cache validation and integrity verification
+- Tiered content for different AI system needs
 
 ---
 
@@ -78,16 +84,22 @@ website.com/
 ├── updates.json               # Recent changes (Optional)
 ├── ai-sitemap.xml            # AI sitemap (Optional)
 ├── opensearch.xml            # Search plugin (Optional)
+├── mcp.json                   # MCP tool discovery (Level 4)
 ├── .well-known/
-│   └── ai.json               # Well-known discovery (Optional)
+│   ├── ai.json               # Well-known discovery (Optional)
+│   └── agents.json           # Agent capabilities (Level 4)
 ├── news/                      # News namespace (Optional)
 │   ├── llms.txt              # News context
 │   ├── speakable.json        # Voice content
 │   ├── changelog.json        # Version history
 │   └── archive.jsonl         # Historical streaming
 └── api/
-    └── webhooks/
-        └── discovery          # Webhook registration (Optional)
+    ├── webhooks/
+    │   └── discovery          # Webhook registration (Optional)
+    └── v1/
+        └── mcp/               # MCP server (Level 4)
+            ├── sse            # SSE transport
+            └── messages       # JSON-RPC handler
 ```
 
 ### 3.2 Request Flow
@@ -673,7 +685,192 @@ Connect citations back to source content:
 
 ---
 
-## 10. Migration Guide
+## 10. MCP Integration (Level 4 - Optional)
+
+Level 4 extends ADP from passive discovery to active interaction via the **Model Context Protocol (MCP)**. This enables AI agents to not just find your content, but to interact with your platform programmatically.
+
+> **Note:** MCP integration is entirely optional. Implementations at Levels 1-3 remain fully compliant without MCP support.
+
+### 10.1 Overview
+
+| Level | Capability | AI Interaction |
+|-------|------------|----------------|
+| 1-3 | Discovery | Read-only |
+| 4 | Agent Integration | Read + Execute |
+
+**What MCP Enables:**
+- AI agents can invoke tools on your platform
+- Structured tool schemas for type-safe interactions
+- Real-time communication via Server-Sent Events (SSE)
+- Authentication for sensitive operations
+
+---
+
+### 10.2 `/mcp.json` Endpoint
+
+Advertises available MCP tools and transport options.
+
+**Response:**
+
+```json
+{
+  "version": "1.0",
+  "name": "example-platform",
+  "description": "Example platform with AI agent tools",
+  "transport": {
+    "type": "sse",
+    "url": "/api/v1/mcp/sse"
+  },
+  "tools": [
+    {
+      "name": "search_content",
+      "description": "Search platform content by query",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Search query"
+          },
+          "limit": {
+            "type": "integer",
+            "default": 10
+          }
+        },
+        "required": ["query"]
+      }
+    },
+    {
+      "name": "get_content",
+      "description": "Retrieve content by ID",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "content_id": {
+            "type": "string",
+            "description": "Content identifier"
+          }
+        },
+        "required": ["content_id"]
+      }
+    }
+  ],
+  "resources": [
+    {
+      "uri": "content://recent",
+      "name": "Recent Content",
+      "description": "List of recently published content"
+    }
+  ]
+}
+```
+
+**Headers:**
+```
+Content-Type: application/json
+Cache-Control: public, max-age=3600
+```
+
+---
+
+### 10.3 `/.well-known/agents.json` Endpoint
+
+Declares agent capabilities and authentication requirements.
+
+**Response:**
+
+```json
+{
+  "version": "1.0",
+  "agents": [
+    {
+      "name": "content-assistant",
+      "description": "AI assistant for content discovery and creation",
+      "capabilities": ["search", "read", "create"],
+      "authentication": "optional",
+      "rate_limit": "100/hour"
+    },
+    {
+      "name": "analytics-agent",
+      "description": "AI agent for analytics and reporting",
+      "capabilities": ["read", "analyze"],
+      "authentication": "required",
+      "rate_limit": "60/hour"
+    }
+  ],
+  "mcp_endpoint": "/mcp.json",
+  "documentation": "https://example.com/docs/agents"
+}
+```
+
+**Authentication Values:**
+- `none` - No authentication required
+- `optional` - Authentication enhances capabilities
+- `required` - Must authenticate to use
+
+---
+
+### 10.4 Transport Options
+
+#### Server-Sent Events (SSE) - Recommended
+
+```
+GET /api/v1/mcp/sse
+Accept: text/event-stream
+```
+
+SSE provides:
+- Real-time bidirectional communication
+- Automatic reconnection
+- Works through firewalls and proxies
+
+#### JSON-RPC Messages
+
+```
+POST /api/v1/mcp/messages
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "method": "tools/call",
+  "params": {
+    "name": "search_content",
+    "arguments": {"query": "example"}
+  },
+  "id": 1
+}
+```
+
+---
+
+### 10.5 Implementation Notes
+
+1. **MCP is OPTIONAL** - Only implement if you want AI agents to perform actions
+2. **SSE is recommended** - Better for real-time interactions than polling
+3. **Authentication required for writes** - Read operations can be public
+4. **Rate limiting strongly recommended** - Protect against abuse
+5. **Log all tool invocations** - Track usage for analytics
+
+**Reference:** [Model Context Protocol Specification](https://modelcontextprotocol.io)
+
+---
+
+## 11. Migration Guide
+
+### From v2.1 to v3.0
+
+1. **Update version number**
+   ```json
+   "version": "3.0"
+   ```
+
+2. **(Optional) Add MCP endpoints** if implementing Level 4:
+   - `/mcp.json` - Tool advertisement
+   - `/.well-known/agents.json` - Agent capabilities
+   - `/api/v1/mcp/sse` - SSE transport
+   - `/api/v1/mcp/messages` - JSON-RPC handler
+
+3. **No breaking changes** - v3.0 is backwards compatible with v2.1
 
 ### From v1.0 to v2.1
 
@@ -697,9 +894,11 @@ Connect citations back to source content:
 
 ### Backwards Compatibility
 
-ADP v2.1 is backwards compatible with v1.0:
-- v1.0 clients can read v2.1 responses (ignore new fields)
-- v2.1 servers can serve v1.0 clients (core fields unchanged)
+ADP v3.0 is backwards compatible with v2.1 and v1.0:
+- v2.1 clients can read v3.0 responses (ignore MCP fields)
+- v3.0 servers can serve v2.1 clients (core fields unchanged)
+- MCP endpoints are optional - not required for compliance
+- v1.0 clients can read v3.0 responses (ignore new fields)
 
 ---
 
@@ -719,5 +918,5 @@ This specification is released under the MIT License.
 
 ---
 
-*AI Discovery Protocol v2.1 - January 2026*
+*AI Discovery Protocol v3.0 - January 2026*
 *Maintained by [Pressonify](https://pressonify.ai)*

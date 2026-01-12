@@ -1,9 +1,10 @@
-# AI Discovery Protocol (ADP) v2.1
+# AI Discovery Protocol (ADP) v3.0
 
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-2.1-green.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-3.0-green.svg)](CHANGELOG.md)
 [![Standard](https://img.shields.io/badge/Status-Production-success.svg)](SPECIFICATION.md)
 [![Results](https://img.shields.io/badge/Results-View%20Data-orange.svg)](RESULTS.md)
+[![MCP](https://img.shields.io/badge/MCP-Level%204-purple.svg)](SPECIFICATION.md#10-mcp-integration-level-4---optional)
 
 **Making websites discoverable to AI systems (ChatGPT, Claude, Perplexity, Gemini)**
 
@@ -48,32 +49,27 @@ AI System → GET /ai-discovery.json (Single entry point)
 
 ---
 
-## What's New in v2.1
+## What's New in v3.0
 
-### Core Enhancements
-- **20 Endpoint Architecture** - Expanded from 4 to 20 specialized endpoints
-- **News Namespace** - `/news/*` endpoints for news-specific AI optimization
-- **Tiered Content** - `/llms.txt`, `/llms-full.txt`, `/llms-lite.txt` for different AI needs
-- **Proof Infrastructure** - Track AI crawler visits and measure citation success
+### MCP Agent Integration (Level 4)
+- **Model Context Protocol** - AI agents can now interact with ADP-compliant platforms
+- **Tool Advertisement** - `/mcp.json` endpoint declares available tools
+- **Agent Declaration** - `/.well-known/agents.json` specifies agent capabilities
+- **22 Endpoint Architecture** - Expanded from 20 to 22 endpoints
 
-### New Endpoints (v2.1)
+### New Endpoints (v3.0)
 | Endpoint | Purpose |
 |----------|---------|
-| `/news/llms.txt` | News-optimized context |
-| `/news/speakable.json` | Voice assistant content |
-| `/news/changelog.json` | Platform version history |
-| `/news/archive.jsonl` | Historical content streaming |
-| `/opensearch.xml` | Browser search integration |
-| `/api/webhooks/discovery` | Webhook registration |
-| `/feed.json` | JSON Feed v1.1 format |
-| `/updates.json` | Recent content changes |
+| `/mcp.json` | MCP tool discovery |
+| `/.well-known/agents.json` | Agent capabilities |
+| `/api/v1/mcp/sse` | SSE transport |
+| `/api/v1/mcp/messages` | JSON-RPC handler |
 
-### HTTP Security Headers
-All endpoints now include:
-- `ETag` - Cache validation
-- `Content-Digest: sha-256=...` - Integrity verification
-- `X-Update-Frequency` - Crawler scheduling hints
-- `Access-Control-Allow-Origin: *` - CORS support
+### Previous Features (v2.1)
+- **News Namespace** - `/news/*` endpoints for news-specific AI optimization
+- **Tiered Content** - `/llms.txt`, `/llms-full.txt`, `/llms-lite.txt`
+- **Proof Infrastructure** - Track AI crawler visits and citations
+- **HTTP Security Headers** - ETag, Content-Digest, X-Update-Frequency, CORS
 
 ---
 
@@ -140,15 +136,18 @@ All Level 2 files plus the news namespace:
 
 ---
 
-### Level 4: Enterprise - Citation Tracking
+### Level 4: Enterprise - MCP & Citation Tracking
 
-Complete ADP implementation with proof infrastructure:
+Complete ADP implementation with MCP integration and proof infrastructure:
 
+- **MCP Integration** - AI agents can invoke tools on your platform
+- **Tool Advertisement** - `/mcp.json` declares available tools
+- **Agent Declaration** - `/.well-known/agents.json` specifies capabilities
 - **Crawler Hit Logging** - Track visits from GPTBot, ClaudeBot, PerplexityBot
 - **Citation Detection** - Monitor when AI systems cite your content
 - **ROI Attribution** - Connect citations back to source content
 
-**See:** [docs/PROOF_INFRASTRUCTURE.md](docs/PROOF_INFRASTRUCTURE.md)
+**See:** [SPECIFICATION.md#10-mcp-integration](SPECIFICATION.md#10-mcp-integration-level-4---optional) | [docs/PROOF_INFRASTRUCTURE.md](docs/PROOF_INFRASTRUCTURE.md)
 
 ---
 
@@ -194,11 +193,20 @@ Complete ADP implementation with proof infrastructure:
 | Endpoint | Format | Purpose |
 |----------|--------|---------|
 | `/.well-known/ai.json` | JSON | Standardized discovery |
+| `/.well-known/agents.json` | JSON | Agent capabilities (Level 4) |
 | `/.well-known/security.txt` | Text | Security contact info |
 | `/opensearch.xml` | XML | Browser search plugin |
 | `/ai-discovery.md` | Markdown | Human-readable discovery |
 | `/api/webhooks/discovery` | JSON | Webhook registration |
 | `/api/v1/adp/stats` | JSON | Public crawler statistics |
+
+### MCP Integration (Level 4)
+
+| Endpoint | Format | Purpose |
+|----------|--------|---------|
+| `/mcp.json` | JSON | MCP tool advertisement |
+| `/api/v1/mcp/sse` | SSE | Real-time MCP transport |
+| `/api/v1/mcp/messages` | JSON-RPC | MCP message handler |
 
 ---
 
@@ -309,7 +317,8 @@ ADP isn't just a specification—it's a **proven system** with measurable outcom
 
 | Version | Date | Changes |
 |---------|------|---------|
-| **2.1** | Jan 2026 | News namespace, 20 endpoints, proof infrastructure |
+| **3.0** | Jan 2026 | MCP integration, 22 endpoints, agent declaration |
+| 2.1 | Jan 2026 | News namespace, 20 endpoints, proof infrastructure |
 | 2.0 | Dec 2025 | HTTP headers, capabilities object, 8-factor scoring |
 | 1.0 | Nov 2025 | Initial release, 4-file architecture |
 

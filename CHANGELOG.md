@@ -7,6 +7,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.0] - 2026-01-12
+
+### MCP Agent Integration
+
+Major update introducing Model Context Protocol (MCP) support for AI agent interactions.
+
+### Added
+
+**MCP Level 4 Extension (Optional)**
+- `/mcp.json` - MCP tool advertisement endpoint
+- `/.well-known/agents.json` - Agent capabilities declaration
+- `/api/v1/mcp/sse` - Server-Sent Events transport
+- `/api/v1/mcp/messages` - JSON-RPC message handler
+
+**New Capabilities**
+- AI agents can invoke tools on ADP-compliant platforms
+- Structured tool schemas for type-safe interactions
+- Real-time communication via SSE
+- Authentication options for sensitive operations
+
+**Documentation**
+- Section 10: MCP Integration added to SPECIFICATION.md
+- Transport options (SSE, JSON-RPC) documented
+- Agent capability declaration schema
+
+### Changed
+
+- Endpoint count: 20 → 22
+- Implementation levels: Level 4 now includes MCP integration
+- File structure updated to include MCP endpoints
+
+### Migration
+
+- **No breaking changes** - MCP Level 4 is entirely optional
+- Existing v2.1 implementations remain fully compliant
+- Add MCP endpoints only if you want AI agent tool invocation
+
+---
+
 ## [2.1] - 2026-01-08
 
 ### News AI Discoverability Sprint
@@ -148,21 +187,38 @@ First public release of the AI Discovery Protocol specification.
 
 ## Version Comparison
 
-| Feature | v1.0 | v2.0 | v2.1 |
-|---------|------|------|------|
-| Endpoints | 4 | 11 | 20 |
-| News Namespace | - | - | ✓ |
-| HTTP Headers | - | ✓ | ✓ |
-| Proof Infrastructure | - | - | ✓ |
-| Capabilities Object | - | ✓ | ✓ |
-| CORS Support | - | ✓ | ✓ |
-| Tiered Content | - | - | ✓ |
-| Voice Optimization | - | - | ✓ |
-| Citation Tracking | - | - | ✓ |
+| Feature | v1.0 | v2.0 | v2.1 | v3.0 |
+|---------|------|------|------|------|
+| Endpoints | 4 | 11 | 20 | 22 |
+| News Namespace | - | - | ✓ | ✓ |
+| HTTP Headers | - | ✓ | ✓ | ✓ |
+| Proof Infrastructure | - | - | ✓ | ✓ |
+| Capabilities Object | - | ✓ | ✓ | ✓ |
+| CORS Support | - | ✓ | ✓ | ✓ |
+| Tiered Content | - | - | ✓ | ✓ |
+| Voice Optimization | - | - | ✓ | ✓ |
+| Citation Tracking | - | - | ✓ | ✓ |
+| **MCP Integration** | - | - | - | ✓ |
+| **Agent Declaration** | - | - | - | ✓ |
 
 ---
 
 ## Migration Notes
+
+### v2.1 → v3.0
+
+1. Update version in `ai-discovery.json`:
+   ```json
+   "version": "3.0"
+   ```
+
+2. (Optional) Add MCP endpoints for Level 4:
+   - `/mcp.json`
+   - `/.well-known/agents.json`
+   - `/api/v1/mcp/sse`
+   - `/api/v1/mcp/messages`
+
+3. No breaking changes - existing v2.1 implementations are fully compliant
 
 ### v1.0 → v2.0
 
@@ -230,6 +286,7 @@ See [QUICK_START.md](QUICK_START.md) for implementation guides.
 
 ---
 
+[3.0]: https://github.com/BuddySpuds/AI-Discovery-Protocol/releases/tag/v3.0
 [2.1]: https://github.com/BuddySpuds/AI-Discovery-Protocol/releases/tag/v2.1
 [2.0]: https://github.com/BuddySpuds/AI-Discovery-Protocol/releases/tag/v2.0
 [1.0.0]: https://github.com/BuddySpuds/AI-Discovery-Protocol/releases/tag/v1.0.0
