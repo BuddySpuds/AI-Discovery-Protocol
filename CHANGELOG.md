@@ -22,7 +22,8 @@ migration guide in the specification.
 ### Changed
 
 - **Level 1 is now page copies:** every content page has a markdown copy,
-  linked from the page body and listed in the sitemap.
+  linked from the page body. A sitemap listing and a head link are
+  recommended.
 - `/ai-discovery.json` is optional (Level 2). It is no longer described as
   the single entry point.
 - Levels 2 to 4 are optional and independent of each other.

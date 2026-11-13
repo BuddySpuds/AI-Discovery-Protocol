@@ -1,7 +1,7 @@
 # Quick Start: Level 1
 
 Level 1 is the only required level. For each content page you publish a
-markdown copy, link to it from the page, and list it in your sitemap. On a
+markdown copy and link to it from the page. On a
 site with a template system this is an afternoon's work.
 
 Working files for every step are in [examples/level-1/](examples/level-1/).
@@ -25,6 +25,9 @@ Render the copy from the same source as the page, so the two cannot disagree.
 - Include the title, the date, who published it and the full body text.
 - Add front matter with the URL of the page it copies.
 - Say nothing the page does not say.
+- Send `X-Robots-Tag: noindex, follow` and
+  `Link: <page URL>; rel="canonical"`, so search engines index the page and
+  not its copy.
 
 ```markdown
 ---
@@ -55,10 +58,14 @@ Add a visible link in the page template, and a head link beside it:
 The body link is the required one. Clients that work from extracted body text
 never see the head.
 
-## 4. List the copies in your sitemap
+## 4. Optionally, list the copies in a sitemap
+
+Recommended, not required: crawlers find the copies through the body link.
+If your copies are `noindex`, put them in a dedicated sitemap rather than the
+main one.
 
 ```xml
-<url><loc>https://example.com/news/dublin-office</loc></url>
+<!-- /sitemap-md.xml -->
 <url><loc>https://example.com/news/dublin-office.md</loc></url>
 ```
 
@@ -80,12 +87,12 @@ Sitemap: https://example.com/sitemap.xml
 ## 6. Audit it
 
 ```bash
-pip install adp-audit-cli
+pip install git+https://github.com/BuddySpuds/adp-audit-cli
 adp-audit example.com
 ```
 
 The tool samples pages from your sitemap and reports, for each, whether it
-has a markdown copy that is linked, listed and crawlable.
+has a markdown copy that is linked from the body and crawlable.
 
 ## 7. Measure it
 

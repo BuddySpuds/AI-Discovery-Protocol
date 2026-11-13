@@ -5,14 +5,14 @@ text: replace all of it with your own.
 
 ## level-1/ (required)
 
-One content page with its markdown copy, the sitemap that lists both, and a
-`robots.txt` that names the sitemap.
+One content page with its markdown copy, a sitemap, and a `robots.txt` that
+names the sitemap.
 
 | File | Serve it at | What to notice |
 |---|---|---|
 | `page.html` | `/news/dublin-office` | The visible body link to the copy, and the head `rel="alternate"` link |
-| `page.md` | `/news/dublin-office.md` | Same content as the page, front matter with the page URL. Serve as `text/markdown` |
-| `sitemap.xml` | `/sitemap.xml` | The page and its copy each have an entry |
+| `page.md` | `/news/dublin-office.md` | Same content as the page, front matter with the page URL. Serve as `text/markdown` with `X-Robots-Tag: noindex, follow` |
+| `sitemap.xml` | `/sitemap.xml` | The page is listed. Copies may go in a dedicated sitemap (optional) |
 | `robots.txt` | `/robots.txt` | One group, a `Sitemap:` line, nothing blocking the page or the copy |
 
 Check the result with [adp-audit-cli](https://github.com/BuddySpuds/adp-audit-cli):

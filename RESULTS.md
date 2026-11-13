@@ -130,13 +130,28 @@ The copies went live on the reference site on 7 July 2026.
 | 11 July 2026 | Copies live for four days, announced in the page head only | 4.0% (241 of 6,018) |
 | 11 July 2026 | Visible body link added to each page; copies added to the sitemap | |
 | 9 August 2026 | 30 days later | 17.3% (5,383 of 31,176) |
+| 24 September 2026 | Copies moved out of the main sitemap into a dedicated one that `robots.txt` does not name. Body links unchanged | |
 | 12 November 2026 | This report | 23.9% (5,290 of 22,168) |
 
 Crawlers found the copies within days once pages pointed at them, and the
 share grew after the copies were linked from the page body and listed in the
-sitemap. The three changes were made close together, so their separate effects
-cannot be told apart. Level 1 therefore requires the body link and the sitemap
-listing and recommends the head link.
+sitemap. Those changes were made together, so July alone cannot separate them.
+
+September can. On 24 September the copies were taken out of the main sitemap
+(they are marked `noindex`, and listing them there drew search-console
+warnings). They stayed linked from each page body.
+
+- In the six full weeks before the move the copies drew between 17.5% and
+  21.8% of crawler requests each week (15.8% in the week of the move). In
+  the seven weeks after, between 22.0% and 30.2%.
+- 18 copies that had never been requested before the move were requested
+  after it, by ten crawlers including PerplexityBot, ClaudeBot, GPTBot and
+  OAI-SearchBot.
+- The dedicated sitemap was requested 31 times in the report window, by two
+  crawlers (GPTBot and Meta-ExternalAgent).
+
+The body link carries discovery. Level 1 therefore requires the body link and
+only recommends a sitemap listing and the head link.
 
 ---
 

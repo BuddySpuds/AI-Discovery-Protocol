@@ -4,7 +4,7 @@
 
 An open specification for publishing a website so that AI crawlers and agents
 can read it. Its one required level is a markdown copy of every content page,
-linked from the page and listed in the sitemap.
+linked from the page body.
 
 ## Will implementing ADP get my site cited by ChatGPT, Claude or Perplexity?
 
@@ -34,17 +34,17 @@ measured case for building them before Level 1.
 ## Why a body link? Is the head link not enough?
 
 Some clients work from the extracted body text of a page and never see
-`<head>` elements or HTTP headers. On the reference site the share of crawler
-requests going to markdown copies rose after body links and sitemap entries
-were added; see the timeline in [RESULTS.md](RESULTS.md).
+`<head>` elements or HTTP headers. On the reference site, copies that were
+linked from the page body but absent from the main sitemap were still found
+by ten crawlers; see the timeline in [RESULTS.md](RESULTS.md).
 
 ## Does the markdown copy create duplicate content?
 
 The copy is a different format of the same document. Put the page URL in the
-copy's front matter so that a reader of the copy cites the page. If you want
-search engines to index only the page, send `X-Robots-Tag: noindex` on the
-copy for search crawlers; note that this may also stop AI crawlers that
-honour it.
+copy's front matter so that a reader of the copy cites the page. To keep
+search engines indexing only the page, serve the copy with
+`X-Robots-Tag: noindex, follow` and a canonical `Link` header. The reference
+site does both, and AI crawlers still fetch its copies.
 
 ## What about content negotiation (Accept: text/markdown)?
 

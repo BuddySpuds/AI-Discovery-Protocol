@@ -36,7 +36,7 @@ implementation show that crawlers fetch pages and per-page markdown copies,
 and rarely fetch root discovery files ([RESULTS.md](RESULTS.md)). So v3.1:
 
 - makes **page copies** the required level: every content page has a markdown
-  copy, linked from the page body and listed in the sitemap;
+  copy, linked from the page body;
 - moves every root file, including `/ai-discovery.json`, to optional levels;
 - defines levels, requirements and endpoints in one machine-readable
   **registry**, `registry/adp-registry.json`, which this document, the audit
@@ -60,7 +60,8 @@ The key words MUST, SHOULD and MAY are used as in RFC 2119.
 ### 2.2 Discovery through links and sitemaps
 - Crawlers find content by following links and reading sitemaps. They do not
   probe for a special entry-point file.
-- Anything a site wants read MUST be reachable from a page body or a sitemap.
+- Anything a site wants read MUST be linked from a page body. A sitemap entry
+  helps and is not a substitute.
 
 ### 2.3 Build on standards
 - Markdown for page copies, `robots.txt` (RFC 9309) and the sitemap protocol
@@ -91,13 +92,20 @@ The site decides which of its pages are content pages.
 For each content page:
 
 <!-- registry:page:start -->
+| Requirement | Status | Rule |
+|---|---|---|
+| `markdown_copy` | Required | The page has a markdown copy at a stable URL. The copy answers 200 with a text/markdown or text/plain content type and carries the same content as the page. |
+| `body_link` | Required | The visible body of the page contains an ordinary link to its markdown copy. |
+| `crawl_allowed` | Required | robots.txt does not block AI crawlers from the page or from its markdown copy. |
+| `sitemap_listing` | Recommended | The markdown copy is listed in a sitemap: the main one, or a dedicated sitemap for copies when the copies are marked noindex. |
+| `alternate_link` | Recommended | The page head carries `<link rel="alternate" type="text/markdown">` pointing at the copy. |
 <!-- registry:page:end -->
 
 And for the site:
 
 - `/robots.txt` MUST exist and MUST name at least one sitemap with a
   `Sitemap:` line, or the site MUST serve `/sitemap.xml`.
-- That sitemap MUST list the content pages and their markdown copies.
+- That sitemap MUST list the content pages.
 
 ### 3.2 The markdown copy
 
@@ -112,8 +120,13 @@ And for the site:
   left out. The copy MUST NOT say anything the page does not.
 - **Front matter.** A YAML front matter block MAY carry metadata (title,
   canonical URL of the page, dates, type).
-- **Canonical link.** The copy SHOULD name the URL of the page it copies, so a
-  reader of the copy can cite the page.
+- **Canonical link.** The copy SHOULD name the URL of the page it copies, in
+  its front matter and in a `Link: <page URL>; rel="canonical"` response
+  header, so a reader of the copy cites the page.
+- **Search indexing.** The copy SHOULD be served with
+  `X-Robots-Tag: noindex, follow`, so search engines index the page and not
+  its copy. The reference implementation does this, and AI crawlers still
+  fetch the copies.
 
 Example copy:
 
@@ -147,14 +160,22 @@ The page head SHOULD also carry:
 <link rel="alternate" type="text/markdown" href="/news/dublin-office.md">
 ```
 
-### 3.4 The sitemap listing
+### 3.4 The sitemap listing (recommended)
 
-Each copy is listed as its own `<url>` entry:
+Copies SHOULD be listed in a sitemap. Where the copies are marked `noindex`
+(section 3.2), list them in a dedicated sitemap rather than the main one, so
+the main sitemap holds only pages meant for search indexing:
 
 ```xml
-<url><loc>https://example.com/news/dublin-office</loc></url>
+<!-- /sitemap-md.xml -->
 <url><loc>https://example.com/news/dublin-office.md</loc></url>
 ```
+
+Listing is recommended and not required because the body link is what
+crawlers are observed to follow. On the reference site the copies were moved
+out of the main sitemap in September 2026, and copies that had never been
+requested before were then found by ten crawlers
+([RESULTS.md](RESULTS.md)).
 
 ### 3.5 Checking conformance
 
@@ -169,7 +190,7 @@ the sitemap and reports how many of the sample conform.
 Crawler
    |
    +--> GET /robots.txt      (rules, and where the sitemap is)
-   +--> GET /sitemap.xml     (pages and their markdown copies)
+   +--> GET /sitemap.xml     (the content pages)
    +--> GET /news/dublin-office       (the page, with a body link to its copy)
    +--> GET /news/dublin-office.md    (the copy)
 ```
@@ -181,6 +202,29 @@ Crawler
 The registry lists every endpoint the protocol defines:
 
 <!-- registry:endpoints:start -->
+| Level | Path | Status | Purpose |
+|---|---|---|---|
+| 1 | `/robots.txt` | Required | Crawler directives, with a Sitemap line |
+| 1 | `/sitemap.xml` | Required | Sitemap listing the content pages |
+| 2 | `/llms.txt` | Optional | Plain-language overview of the site (llmstxt.org format) |
+| 2 | `/llms-full.txt` | Optional | Long-form context document |
+| 2 | `/llms-lite.txt` | Optional | Condensed context document |
+| 2 | `/ai-discovery.json` | Optional | Meta-index of the site's machine-readable resources |
+| 2 | `/ai-discovery.md` | Optional | Markdown rendering of the meta-index |
+| 2 | `/knowledge-graph.json` | Optional | Schema.org entity catalogue as JSON-LD |
+| 2 | `/.well-known/ai.json` | Optional | Well-known pointer to the meta-index |
+| 2 | `/opensearch.xml` | Optional | OpenSearch description of the site search |
+| 3 | `/feed.json` | Optional | JSON Feed of recent content |
+| 3 | `/rss.xml` | Optional | RSS feed of recent content |
+| 3 | `/updates.json` | Optional | Recent changes |
+| 3 | `/api/v1/webhooks/discovery` | Optional | Webhook registration for content updates |
+| 3 | `/news/llms.txt` | Optional | Context document for the news section |
+| 3 | `/news/speakable.json` | Optional | Short spoken-form summaries |
+| 3 | `/news/changelog.json` | Optional | Dated list of additions and corrections |
+| 3 | `/news/archive.jsonl` | Optional | Full archive, one JSON object per line |
+| 4 | `/mcp.json` | Optional | Model Context Protocol server manifest |
+| 4 | `/.well-known/agents.json` | Optional | Agent capability declaration |
+| 4 | `/api/v1/adp/stats` | Optional | Public crawler-visit statistics |
 <!-- registry:endpoints:end -->
 
 A site that serves an optional endpoint SHOULD link to it from
@@ -190,6 +234,13 @@ current: a stale file is worse than no file.
 Retired paths:
 
 <!-- registry:retired:start -->
+| Path | Retired in | Use instead | Why |
+|---|---|---|---|
+| `/ai-sitemap.xml` | 3.1 | `/sitemap.xml` | Crawlers read the standard sitemap; a second sitemap of the same pages is not needed. |
+| `/.well-known/security.txt` | 3.1 | Nothing | A good practice under RFC 9116, but not an AI discovery file. No longer counted. |
+| `/ai.txt` | 3.1 | Nothing | Never part of a published level; removed from the reference implementation in July 2026. |
+| `/ai-manifest.json` | 3.1 | Nothing | Never part of a published level; removed from the reference implementation in July 2026. |
+| `/.well-known/ai-plugin.json` | 3.1 | `/mcp.json` | Superseded by the MCP manifest. |
 <!-- registry:retired:end -->
 
 ### 4.1 `/ai-discovery.json` (Optional, Level 2)
@@ -655,13 +706,19 @@ Allow: /
 ## 8. Implementation Levels
 
 <!-- registry:levels:start -->
+| Level | Name | Status | What it is |
+|---|---|---|---|
+| 1 | Page copies | Required | Every content page has a markdown copy that is linked from the page body. |
+| 2 | Site context | Optional | Root files that describe the site as a whole. |
+| 3 | Feeds and news | Optional | Machine-readable streams of new and changed content. |
+| 4 | Agent actions and measurement | Optional | Manifests that let an agent call tools on the site, and a public statistics endpoint. |
 <!-- registry:levels:end -->
 
 Only Level 1 is required. Levels 2 to 4 are independent of each other.
 
 | Level | What to build | Evidence from the reference site (30 days to 12 November 2026) |
 |---|---|---|
-| 1 | Markdown copies, body links, sitemap listing | Copies drew 23.9% of crawler requests; `robots.txt` and sitemaps 4.6% |
+| 1 | Markdown copies linked from the page body | Copies drew 23.9% of crawler requests; `robots.txt` and sitemaps 4.6% |
 | 2 | `/llms.txt`, `/ai-discovery.json`, `/knowledge-graph.json` and related files | All Level 2 files together: under 1% |
 | 3 | Feeds and the news namespace | All Level 3 files together: under 1% |
 | 4 | MCP manifest, agent declaration, statistics endpoint | 3 requests |
@@ -909,12 +966,13 @@ Level 1 site.
 
 1. **Add a markdown copy for each content page** (section 3.2).
 2. **Link each copy from its page body**, and add the head link (section 3.3).
-3. **List the copies in your sitemap** (section 3.4).
+3. **Optionally list the copies in a sitemap** (section 3.4).
 4. **Keep or drop root files as you prefer.** `/ai-discovery.json`,
    `/llms.txt` and `/knowledge-graph.json` are now optional. If you keep
    `/ai-discovery.json`, set `"version": "3.1"` and add a pointer to an index
    of your markdown copies.
-5. **Replace `/ai-sitemap.xml`** with entries in the standard sitemap.
+5. **Drop `/ai-sitemap.xml`** if it repeats the pages in your standard
+   sitemap.
 6. **Start logging** crawler requests by path (section 9).
 
 ### From v2.1 to v3.0

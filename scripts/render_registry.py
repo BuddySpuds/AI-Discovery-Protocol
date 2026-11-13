@@ -92,14 +92,13 @@ RENDERERS = {
 
 def render(text: str, registry: dict) -> str:
     for name, renderer in RENDERERS.items():
-        pattern = re.compile(
-            rf"(<!-- registry:{name}:start -->\n).*?(\n<!-- registry:{name}:end -->)",
-            re.DOTALL,
-        )
-        text = pattern.sub(
-            lambda match, table=renderer(registry): match.group(1) + table + match.group(2),
-            text,
-        )
+        start = f"<!-- registry:{name}:start -->"
+        end = f"<!-- registry:{name}:end -->"
+        if (start in text) != (end in text):
+            raise SystemExit(f"unbalanced registry:{name} markers")
+        pattern = re.compile(re.escape(start) + r".*?" + re.escape(end), re.DOTALL)
+        block = f"{start}\n{renderer(registry)}\n{end}"
+        text = pattern.sub(lambda match, block=block: block, text)
     return text
 
 
