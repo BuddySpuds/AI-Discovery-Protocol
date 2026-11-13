@@ -84,7 +84,14 @@ Allow: /
 Sitemap: https://example.com/sitemap.xml
 ```
 
-## 6. Audit it
+## 6. Optionally, notify search engines
+
+When a page is published, corrected or removed, submit its URL through
+[IndexNow](https://www.indexnow.org). Submit the page, not the `noindex`
+copy, and keep a log of what you sent. This reaches Bing and some other
+engines, which some AI answer engines draw on.
+
+## 7. Audit it
 
 ```bash
 pip install git+https://github.com/BuddySpuds/adp-audit-cli
@@ -94,7 +101,7 @@ adp-audit example.com
 The tool samples pages from your sitemap and reports, for each, whether it
 has a markdown copy that is linked from the body and crawlable.
 
-## 7. Measure it
+## 8. Measure it
 
 Log the user agent and path of each crawler request, and count requests for
 your copies against requests for your pages. Section 9 of the

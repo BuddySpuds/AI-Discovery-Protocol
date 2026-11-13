@@ -22,6 +22,8 @@ body. That is Level 1, and it is the only required level.
   <a href="/blog/our-launch.md">this page as markdown</a>.</p>
 ```
 
+Recommended alongside it: list the copies in a sitemap, and notify search
+engines through IndexNow when a page is published, corrected or removed.
 Everything else in the protocol (`llms.txt`, a meta-index, a knowledge graph,
 feeds, agent manifests) is optional.
 

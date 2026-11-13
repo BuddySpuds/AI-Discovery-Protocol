@@ -177,14 +177,33 @@ out of the main sitemap in September 2026, and copies that had never been
 requested before were then found by ten crawlers
 ([RESULTS.md](RESULTS.md)).
 
-### 3.5 Checking conformance
+### 3.5 Telling search engines about a change (recommended)
+
+A site SHOULD notify search engines through [IndexNow](https://www.indexnow.org)
+when a content page is published, corrected or removed. Some AI answer
+engines draw on a search index such as Bing's for discovery, so a page that is slow to reach
+the index is slow to reach them.
+
+- Submit the **page** URL. Do not submit the markdown copy when it is marked
+  `noindex` (section 3.2): IndexNow is for URLs meant to be indexed.
+- Submit on publication, on a material correction, and on removal.
+- Submit hub pages that changed as a result, for example a news index.
+- Keep a record of each submission and its response, so gaps can be found
+  and backfilled.
+
+IndexNow is received by Bing and a number of other engines. It is not
+received by Google, and AI crawlers do not read it directly. It is
+recommended and not required because its effect on AI crawling has not been
+measured on the reference site.
+
+### 3.6 Checking conformance
 
 A page conforms to Level 1 when every required row in section 3.1 holds for
 it. A site conforms when all of its content pages do. Because only the site
 knows which pages are content pages, an automated audit samples pages from
 the sitemap and reports how many of the sample conform.
 
-### 3.6 Request flow
+### 3.7 Request flow
 
 ```
 Crawler
@@ -1028,6 +1047,7 @@ The optional endpoints in v3.1 keep the v3.0 formats, which were backwards compa
 - [robots.txt](https://www.rfc-editor.org/rfc/rfc9309) - Crawler directives (RFC 9309)
 - [Sitemaps](https://www.sitemaps.org/protocol.html) - Sitemap protocol
 - [llms.txt](https://llmstxt.org) - Context document format
+- [IndexNow](https://www.indexnow.org) - Change notification for search engines
 - [HTTP Caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching) - Cache headers
 
 ---

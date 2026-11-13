@@ -53,6 +53,14 @@ idea that the protocol does not yet require, because we have not measured how
 many clients ask. Section 9 of the specification asks implementers to log the
 `Accept` header so that the question can be answered with data.
 
+## Where does IndexNow fit?
+
+It is a recommended step in Level 1: submit the page URL when a page is
+published, corrected or removed. It reaches Bing and some other search
+engines, which some AI answer engines draw on. Do not submit the markdown
+copy if it is `noindex`. Its effect on AI crawling has not been measured on
+the reference site, which is why it is recommended and not required.
+
 ## Which pages count as content pages?
 
 You decide. As a guide: pages whose text you would be glad to see quoted.

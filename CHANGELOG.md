@@ -35,6 +35,8 @@ migration guide in the specification.
 
 ### Added
 
+- Section 3.5: IndexNow notification on publish, correction and removal is a
+  recommended Level 1 step (the page URL, never a `noindex` copy).
 - `registry/adp-registry.json`: the one machine-readable list of levels, page
   requirements and endpoints. The tables in the README and the specification
   are generated from it (`scripts/render_registry.py`), and CI fails if they
