@@ -7,6 +7,57 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.1] - 2026-11-13
+
+### Evidence revision
+
+Request logs from the reference implementation show crawlers fetching pages
+and per-page markdown copies, and rarely fetching root discovery files
+([RESULTS.md](RESULTS.md)). This release rebuilds the levels around that.
+
+Numbered 3.1 because every endpoint format is unchanged. It does change what
+is required, so a 3.0 site is not automatically a 3.1 Level 1 site; see the
+migration guide in the specification.
+
+### Changed
+
+- **Level 1 is now page copies:** every content page has a markdown copy,
+  linked from the page body. A sitemap listing and a head link are
+  recommended.
+- `/ai-discovery.json` is optional (Level 2). It is no longer described as
+  the single entry point.
+- Levels 2 to 4 are optional and independent of each other.
+- Section 9 is now "Measurement": log requests by path, record the `Accept`
+  header, verify crawler addresses, and report answer-time fetchers apart
+  from index crawlers.
+- RESULTS.md replaced with measured crawler data, its method and its limits.
+- README, Quick Start, FAQ and examples rewritten for the new levels.
+
+### Added
+
+- Section 3.5: IndexNow notification on publish, correction and removal is a
+  recommended Level 1 step (the page URL, never a `noindex` copy).
+- `registry/adp-registry.json`: the one machine-readable list of levels, page
+  requirements and endpoints. The tables in the README and the specification
+  are generated from it (`scripts/render_registry.py`), and CI fails if they
+  drift.
+- `examples/level-1/`: a page, its markdown copy, a sitemap and a robots.txt.
+
+### Retired
+
+- `/ai-sitemap.xml` (use the standard sitemap).
+- `/.well-known/security.txt` is no longer counted as an ADP endpoint.
+
+### Removed
+
+- The citation outcome figures, case studies, conversion rates and return
+  estimates published in earlier versions of RESULTS.md, the README, the FAQ
+  and the example guides. They cannot be substantiated.
+- `docs/COMPARISON.md`, `docs/EXPLAINED_SIMPLY.md` and the per-level example
+  guides, which were built on those figures.
+
+---
+
 ## [3.0] - 2026-01-12
 
 ### MCP Agent Integration
@@ -270,7 +321,6 @@ First public release of the AI Discovery Protocol specification.
 Traditional SEO was designed for keyword-based crawlers. AI systems (ChatGPT, Claude, Perplexity, Gemini) need structured entity catalogs, freshness signals, and context-optimized documents. ADP provides a standard discovery protocol for the AI era.
 
 **Key Benefits:**
-- **10x faster discovery:** AI systems find content in 6-24 hours vs 7-14 days
 - **Structured understanding:** Entity catalogs instead of HTML parsing
 - **Future-proof:** Designed for AI reasoning systems
 - **Open standard:** MIT-licensed, free to implement

@@ -1,31 +1,36 @@
 {
-  "$schema": "https://pressonify.ai/schemas/ai-discovery/v1.0.json",
-  "version": "1.0.0",
-  "generatedAt": "2025-11-05T12:00:00Z",
+  "version": "3.1",
+  "generatedAt": "2026-11-13T12:00:00Z",
   "website": {
     "url": "https://example.com",
     "name": "Example Corporation",
     "description": "Brief description of your company (1-2 sentences)"
   },
   "endpoints": {
+    "markdownCopies": {
+      "url": "https://example.com/md/index.md",
+      "format": "text/markdown",
+      "description": "Index of the markdown copies of every content page"
+    },
     "knowledgeGraph": {
       "url": "https://example.com/knowledge-graph.json",
       "format": "application/ld+json",
-      "entityCount": 25,
-      "lastModified": "2025-11-05T12:00:00Z"
+      "lastModified": "2026-11-13T12:00:00Z"
     },
     "contextDocument": {
       "url": "https://example.com/llms.txt",
       "format": "text/markdown",
-      "lastModified": "2025-11-05T12:00:00Z"
+      "lastModified": "2026-11-13T12:00:00Z"
     },
     "crawlerDirectives": {
       "url": "https://example.com/robots.txt",
       "allowsAI": true
+    },
+    "sitemaps": {
+      "main": "https://example.com/sitemap.xml"
     }
   },
   "metadata": {
-    "industry": "Technology",
     "language": "en",
     "updateFrequency": "weekly"
   }

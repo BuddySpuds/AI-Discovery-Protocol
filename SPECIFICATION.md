@@ -1,10 +1,10 @@
-# AI Discovery Protocol (ADP) v3.0
+# AI Discovery Protocol (ADP) v3.1
 
 ## Complete Specification
 
 **Status:** Production Specification
-**Version:** 3.0
-**Published:** January 12, 2026
+**Version:** 3.1
+**Published:** November 13, 2026
 **Author:** Pressonify.ai
 **License:** MIT License
 
@@ -14,13 +14,13 @@
 
 1. [Abstract](#1-abstract)
 2. [Design Principles](#2-design-principles)
-3. [Core Architecture](#3-core-architecture)
-4. [Endpoint Specifications](#4-endpoint-specifications)
+3. [Level 1: Page Copies](#3-level-1-page-copies-required)
+4. [Optional Endpoint Specifications](#4-optional-endpoint-specifications)
 5. [HTTP Headers](#5-http-headers)
 6. [News Namespace](#6-news-namespace)
 7. [Security Considerations](#7-security-considerations)
 8. [Implementation Levels](#8-implementation-levels)
-9. [Proof Infrastructure](#9-proof-infrastructure)
+9. [Measurement](#9-measurement)
 10. [MCP Integration (Level 4)](#10-mcp-integration-level-4---optional)
 11. [Migration Guide](#11-migration-guide)
 
@@ -28,112 +28,252 @@
 
 ## 1. Abstract
 
-The AI Discovery Protocol (ADP) is an open standard that enables websites to make their content discoverable and understandable to AI systems (LLMs, AI search engines, reasoning engines, and AI agents). Unlike traditional SEO which optimizes for keyword-based search crawlers, ADP provides structured, machine-readable metadata specifically designed for AI reasoning systems.
+The AI Discovery Protocol (ADP) is an open standard for publishing a website so
+that AI crawlers and agents can read it.
 
-ADP v3.0 introduces:
-- **MCP Integration** (Model Context Protocol) for AI agent interactions
-- **22 endpoint architecture** (expanded from 20 in v2.1)
-- **Agent capabilities declaration** via `/.well-known/agents.json`
-- **Tool advertisement** via `/mcp.json`
+ADP v3.1 is an evidence revision. Request logs from the reference
+implementation show that crawlers fetch pages and per-page markdown copies,
+and rarely fetch root discovery files ([RESULTS.md](RESULTS.md)). So v3.1:
 
-Previous features (v2.1):
-- News namespace for publishers and news content
-- Proof infrastructure for tracking AI crawler visits and citations
-- HTTP security headers for cache validation and integrity verification
-- Tiered content for different AI system needs
+- makes **page copies** the required level: every content page has a markdown
+  copy, linked from the page body;
+- moves every root file, including `/ai-discovery.json`, to optional levels;
+- defines levels, requirements and endpoints in one machine-readable
+  **registry**, `registry/adp-registry.json`, which this document, the audit
+  tool and the reference implementation all read.
+
+ADP makes no claim that conformance produces citations. It specifies a way to
+publish and a way to measure.
+
+The key words MUST, SHOULD and MAY are used as in RFC 2119.
 
 ---
 
 ## 2. Design Principles
 
-### 2.1 Single Entry Point
-- AI systems request `/ai-discovery.json` first
-- All other endpoints are referenced from this meta-index
-- Predictable, no guessing required
+### 2.1 Follow measured behaviour
+- A surface belongs in the required level only if crawlers are observed
+  fetching it.
+- Each revision states the evidence it rests on and the limits of that
+  evidence.
 
-### 2.2 Build on Standards
-- Schema.org vocabularies for entities
-- JSON-LD format (W3C-recommended)
-- Standard HTTP headers
+### 2.2 Discovery through links and sitemaps
+- Crawlers find content by following links and reading sitemaps. They do not
+  probe for a special entry-point file.
+- Anything a site wants read MUST be linked from a page body. A sitemap entry
+  helps and is not a substitute.
 
-### 2.3 Progressive Enhancement
-- Only `/ai-discovery.json` is strictly required
-- Additional endpoints provide incremental value
-- Sites can implement features at their own pace
+### 2.3 Build on standards
+- Markdown for page copies, `robots.txt` (RFC 9309) and the sitemap protocol
+  for discovery.
+- Schema.org vocabularies and JSON-LD for entities.
+- Standard HTTP headers.
 
-### 2.4 AI-First Design
-- Content sized for context windows
-- Structured for AI extraction
-- Freshness signals for cache management
+### 2.4 One registry
+- Levels, page requirements and endpoints are defined once, in
+  `registry/adp-registry.json`.
+- Tools MUST read the registry rather than carry their own list.
 
----
-
-## 3. Core Architecture
-
-### 3.1 File Structure
-
-```
-website.com/
-├── ai-discovery.json          # Meta-index (REQUIRED)
-├── knowledge-graph.json       # Entity catalog (Recommended)
-├── llms.txt                   # Context document (Recommended)
-├── llms-lite.txt             # Minimal context (Optional)
-├── llms-full.txt             # Comprehensive context (Optional)
-├── robots.txt                 # Crawler directives (Recommended)
-├── feed.json                  # JSON Feed (Optional)
-├── updates.json               # Recent changes (Optional)
-├── ai-sitemap.xml            # AI sitemap (Optional)
-├── opensearch.xml            # Search plugin (Optional)
-├── mcp.json                   # MCP tool discovery (Level 4)
-├── .well-known/
-│   ├── ai.json               # Well-known discovery (Optional)
-│   └── agents.json           # Agent capabilities (Level 4)
-├── news/                      # News namespace (Optional)
-│   ├── llms.txt              # News context
-│   ├── speakable.json        # Voice content
-│   ├── changelog.json        # Version history
-│   └── archive.jsonl         # Historical streaming
-└── api/
-    ├── webhooks/
-    │   └── discovery          # Webhook registration (Optional)
-    └── v1/
-        └── mcp/               # MCP server (Level 4)
-            ├── sse            # SSE transport
-            └── messages       # JSON-RPC handler
-```
-
-### 3.2 Request Flow
-
-```
-AI System
-    │
-    ▼
-GET /ai-discovery.json
-    │
-    ├──► Parse meta-index
-    │
-    ▼
-Discover available endpoints
-    │
-    ├──► /knowledge-graph.json (entities)
-    ├──► /llms.txt (context)
-    ├──► /feed.json (updates)
-    └──► /news/* (news content)
-```
+### 2.5 Optional means optional
+- Only Level 1 is needed to conform.
+- Levels 2 to 4 are independent: a site MAY implement any of them, in any
+  order, and MAY skip them all.
 
 ---
 
-## 4. Endpoint Specifications
+## 3. Level 1: Page Copies (Required)
 
-### 4.1 `/ai-discovery.json` (REQUIRED)
+### 3.1 Requirements
 
-The single entry point for AI discovery. All other endpoints are referenced here.
+A **content page** is a page whose text the site wants AI systems to be able
+to read and quote: an article, a release, a product page, a reference entry.
+The site decides which of its pages are content pages.
+
+For each content page:
+
+<!-- registry:page:start -->
+| Requirement | Status | Rule |
+|---|---|---|
+| `markdown_copy` | Required | The page has a markdown copy at a stable URL. The copy answers 200 with a text/markdown or text/plain content type and carries the same content as the page. |
+| `body_link` | Required | The visible body of the page contains an ordinary link to its markdown copy. |
+| `crawl_allowed` | Required | robots.txt does not block AI crawlers from the page or from its markdown copy. |
+| `sitemap_listing` | Recommended | The markdown copy is listed in a sitemap: the main one, or a dedicated sitemap for copies when the copies are marked noindex. |
+| `alternate_link` | Recommended | The page head carries `<link rel="alternate" type="text/markdown">` pointing at the copy. |
+<!-- registry:page:end -->
+
+And for the site:
+
+- `/robots.txt` MUST exist and MUST name at least one sitemap with a
+  `Sitemap:` line, or the site MUST serve `/sitemap.xml`.
+- That sitemap MUST list the content pages.
+
+### 3.2 The markdown copy
+
+- **Location.** Any stable URL on the same site. Two common layouts are the
+  page URL with `.md` appended (`/blog/our-launch.md`) and a parallel tree
+  (`/md/blog/our-launch.md`). The reference implementation uses a parallel
+  tree under `/okf/`.
+- **Response.** `200`, with `Content-Type: text/markdown` or `text/plain`, in
+  UTF-8.
+- **Content.** The same content as the page: title, date, author or
+  publisher, and the full body text. Navigation, advertising and scripts are
+  left out. The copy MUST NOT say anything the page does not.
+- **Front matter.** A YAML front matter block MAY carry metadata (title,
+  canonical URL of the page, dates, type).
+- **Canonical link.** The copy SHOULD name the URL of the page it copies, in
+  its front matter and in a `Link: <page URL>; rel="canonical"` response
+  header, so a reader of the copy cites the page.
+- **Search indexing.** The copy SHOULD be served with
+  `X-Robots-Tag: noindex, follow`, so search engines index the page and not
+  its copy. The reference implementation does this, and AI crawlers still
+  fetch the copies.
+
+Example copy:
+
+```markdown
+---
+title: Example Corporation opens a Dublin office
+url: https://example.com/news/dublin-office
+date: 2026-11-13
+type: press-release
+---
+
+# Example Corporation opens a Dublin office
+
+Example Corporation today opened an office in Dublin...
+```
+
+### 3.3 The link from the page
+
+The page body MUST contain an ordinary, visible `<a href>` link to the copy.
+Crawlers that work from extracted body text do not see `<head>` elements or
+HTTP headers, so a head link alone is not enough.
+
+```html
+<p>For AI agents and developers:
+  <a href="/news/dublin-office.md">this page as markdown</a>.</p>
+```
+
+The page head SHOULD also carry:
+
+```html
+<link rel="alternate" type="text/markdown" href="/news/dublin-office.md">
+```
+
+### 3.4 The sitemap listing (recommended)
+
+Copies SHOULD be listed in a sitemap. Where the copies are marked `noindex`
+(section 3.2), list them in a dedicated sitemap rather than the main one, so
+the main sitemap holds only pages meant for search indexing:
+
+```xml
+<!-- /sitemap-md.xml -->
+<url><loc>https://example.com/news/dublin-office.md</loc></url>
+```
+
+Listing is recommended and not required because the body link is what
+crawlers are observed to follow. On the reference site the copies were moved
+out of the main sitemap in September 2026, and copies that had never been
+requested before were then found by ten crawlers
+([RESULTS.md](RESULTS.md)).
+
+### 3.5 Telling search engines about a change (recommended)
+
+A site SHOULD notify search engines through [IndexNow](https://www.indexnow.org)
+when a content page is published, corrected or removed. Some AI answer
+engines draw on a search index such as Bing's for discovery, so a page that is slow to reach
+the index is slow to reach them.
+
+- Submit the **page** URL. Do not submit the markdown copy when it is marked
+  `noindex` (section 3.2): IndexNow is for URLs meant to be indexed.
+- Submit on publication, on a material correction, and on removal.
+- Submit hub pages that changed as a result, for example a news index.
+- Keep a record of each submission and its response, so gaps can be found
+  and backfilled.
+
+IndexNow is received by Bing and a number of other engines. It is not
+received by Google, and AI crawlers do not read it directly. It is
+recommended and not required because its effect on AI crawling has not been
+measured on the reference site.
+
+### 3.6 Checking conformance
+
+A page conforms to Level 1 when every required row in section 3.1 holds for
+it. A site conforms when all of its content pages do. Because only the site
+knows which pages are content pages, an automated audit samples pages from
+the sitemap and reports how many of the sample conform.
+
+### 3.7 Request flow
+
+```
+Crawler
+   |
+   +--> GET /robots.txt      (rules, and where the sitemap is)
+   +--> GET /sitemap.xml     (the content pages)
+   +--> GET /news/dublin-office       (the page, with a body link to its copy)
+   +--> GET /news/dublin-office.md    (the copy)
+```
+
+---
+
+## 4. Optional Endpoint Specifications
+
+The registry lists every endpoint the protocol defines:
+
+<!-- registry:endpoints:start -->
+| Level | Path | Status | Purpose |
+|---|---|---|---|
+| 1 | `/robots.txt` | Required | Crawler directives, with a Sitemap line |
+| 1 | `/sitemap.xml` | Required | Sitemap listing the content pages |
+| 2 | `/llms.txt` | Optional | Plain-language overview of the site (llmstxt.org format) |
+| 2 | `/llms-full.txt` | Optional | Long-form context document |
+| 2 | `/llms-lite.txt` | Optional | Condensed context document |
+| 2 | `/ai-discovery.json` | Optional | Meta-index of the site's machine-readable resources |
+| 2 | `/ai-discovery.md` | Optional | Markdown rendering of the meta-index |
+| 2 | `/knowledge-graph.json` | Optional | Schema.org entity catalogue as JSON-LD |
+| 2 | `/.well-known/ai.json` | Optional | Well-known pointer to the meta-index |
+| 2 | `/opensearch.xml` | Optional | OpenSearch description of the site search |
+| 3 | `/feed.json` | Optional | JSON Feed of recent content |
+| 3 | `/rss.xml` | Optional | RSS feed of recent content |
+| 3 | `/updates.json` | Optional | Recent changes |
+| 3 | `/api/v1/webhooks/discovery` | Optional | Webhook registration for content updates |
+| 3 | `/news/llms.txt` | Optional | Context document for the news section |
+| 3 | `/news/speakable.json` | Optional | Short spoken-form summaries |
+| 3 | `/news/changelog.json` | Optional | Dated list of additions and corrections |
+| 3 | `/news/archive.jsonl` | Optional | Full archive, one JSON object per line |
+| 4 | `/mcp.json` | Optional | Model Context Protocol server manifest |
+| 4 | `/.well-known/agents.json` | Optional | Agent capability declaration |
+| 4 | `/api/v1/adp/stats` | Optional | Public crawler-visit statistics |
+<!-- registry:endpoints:end -->
+
+A site that serves an optional endpoint SHOULD link to it from
+`/ai-discovery.json` or `/llms.txt` if it serves either, and MUST keep it
+current: a stale file is worse than no file.
+
+Retired paths:
+
+<!-- registry:retired:start -->
+| Path | Retired in | Use instead | Why |
+|---|---|---|---|
+| `/ai-sitemap.xml` | 3.1 | `/sitemap.xml` | Crawlers read the standard sitemap; a second sitemap of the same pages is not needed. |
+| `/.well-known/security.txt` | 3.1 | Nothing | A good practice under RFC 9116, but not an AI discovery file. No longer counted. |
+| `/ai.txt` | 3.1 | Nothing | Never part of a published level; removed from the reference implementation in July 2026. |
+| `/ai-manifest.json` | 3.1 | Nothing | Never part of a published level; removed from the reference implementation in July 2026. |
+| `/.well-known/ai-plugin.json` | 3.1 | `/mcp.json` | Superseded by the MCP manifest. |
+<!-- registry:retired:end -->
+
+### 4.1 `/ai-discovery.json` (Optional, Level 2)
+
+A meta-index of the site's machine-readable resources. Versions 1.0 to 3.0
+required this file as the single entry point; v3.1 does not, because crawlers
+are not observed using it that way.
+
 
 **Response:**
 
 ```json
 {
-  "version": "2.1",
+  "version": "3.1",
   "generatedAt": "2026-01-08T12:00:00Z",
   "website": {
     "url": "https://example.com",
@@ -143,6 +283,7 @@ The single entry point for AI discovery. All other endpoints are referenced here
     "category": "technology"
   },
   "endpoints": {
+    "markdownCopies": "/md/index.md",
     "knowledgeGraph": "/knowledge-graph.json",
     "contextDocument": "/llms.txt",
     "contextDocumentFull": "/llms-full.txt",
@@ -150,9 +291,8 @@ The single entry point for AI discovery. All other endpoints are referenced here
     "crawlerDirectives": "/robots.txt",
     "contentFeed": "/feed.json",
     "recentUpdates": "/updates.json",
-    "aiSitemap": "/ai-sitemap.xml",
     "newsNamespace": "/news/",
-    "webhookDiscovery": "/api/webhooks/discovery"
+    "webhookDiscovery": "/api/v1/webhooks/discovery"
   },
   "capabilities": {
     "supportsVersioning": true,
@@ -177,7 +317,7 @@ X-Update-Frequency: daily
 
 ---
 
-### 4.2 `/knowledge-graph.json` (Recommended)
+### 4.2 `/knowledge-graph.json` (Optional, Level 2)
 
 Schema.org entity catalog in JSON-LD format.
 
@@ -226,7 +366,7 @@ Schema.org entity catalog in JSON-LD format.
 
 ---
 
-### 4.3 `/llms.txt` (Recommended)
+### 4.3 `/llms.txt` (Optional, Level 2)
 
 Human-readable Markdown context document optimized for AI processing.
 
@@ -260,7 +400,7 @@ Example Corporation helps businesses achieve their goals through innovative solu
 
 ---
 
-### 4.4 `/feed.json` (Optional)
+### 4.4 `/feed.json` (Optional, Level 3)
 
 JSON Feed v1.1 format for content updates.
 
@@ -288,7 +428,7 @@ JSON Feed v1.1 format for content updates.
 
 ---
 
-### 4.5 `/updates.json` (Optional)
+### 4.5 `/updates.json` (Optional, Level 3)
 
 Recent content changes for incremental crawling.
 
@@ -318,9 +458,9 @@ Recent content changes for incremental crawling.
 
 ---
 
-### 4.6 `/ai-sitemap.xml` (Optional)
+### 4.6 `/ai-sitemap.xml` (Retired in v3.1)
 
-AI-optimized XML sitemap with priority hints.
+Retired. List pages and their markdown copies in the standard sitemap instead. The format below is kept for sites that still serve the file.
 
 **Response:**
 
@@ -347,7 +487,7 @@ AI-optimized XML sitemap with priority hints.
 
 ---
 
-### 4.7 `/.well-known/ai.json` (Optional)
+### 4.7 `/.well-known/ai.json` (Optional, Level 2)
 
 Standardized well-known location for AI discovery.
 
@@ -355,7 +495,7 @@ Standardized well-known location for AI discovery.
 
 ---
 
-### 4.8 `/opensearch.xml` (Optional)
+### 4.8 `/opensearch.xml` (Optional, Level 2)
 
 Browser search plugin integration.
 
@@ -373,7 +513,7 @@ Browser search plugin integration.
 
 ---
 
-### 4.9 `/api/webhooks/discovery` (Optional)
+### 4.9 `/api/v1/webhooks/discovery` (Optional, Level 3)
 
 Webhook registration endpoint for real-time updates.
 
@@ -402,7 +542,7 @@ Webhook registration endpoint for real-time updates.
 
 ## 5. HTTP Headers
 
-All ADP endpoints SHOULD include these headers:
+Markdown copies and optional endpoints SHOULD include these headers:
 
 ### 5.1 Required Headers
 
@@ -584,104 +724,85 @@ Allow: /
 
 ## 8. Implementation Levels
 
-### Level 1: Minimal
-- `/ai-discovery.json` only
-- 15 minutes to implement
+<!-- registry:levels:start -->
+| Level | Name | Status | What it is |
+|---|---|---|---|
+| 1 | Page copies | Required | Every content page has a markdown copy that is linked from the page body. |
+| 2 | Site context | Optional | Root files that describe the site as a whole. |
+| 3 | Feeds and news | Optional | Machine-readable streams of new and changed content. |
+| 4 | Agent actions and measurement | Optional | Manifests that let an agent call tools on the site, and a public statistics endpoint. |
+<!-- registry:levels:end -->
 
-### Level 2: Standard (Recommended)
-- `/ai-discovery.json`
-- `/knowledge-graph.json`
-- `/llms.txt`
-- `/robots.txt`
-- 2-4 hours to implement
+Only Level 1 is required. Levels 2 to 4 are independent of each other.
 
-### Level 3: Advanced
-- All Level 2 files
-- `/feed.json`
-- `/updates.json`
-- HTTP security headers
-- 1-2 days to implement
+| Level | What to build | Evidence from the reference site (30 days to 12 November 2026) |
+|---|---|---|
+| 1 | Markdown copies linked from the page body | Copies drew 23.9% of crawler requests; `robots.txt` and sitemaps 4.6% |
+| 2 | `/llms.txt`, `/ai-discovery.json`, `/knowledge-graph.json` and related files | All Level 2 files together: under 1% |
+| 3 | Feeds and the news namespace | All Level 3 files together: under 1% |
+| 4 | MCP manifest, agent declaration, statistics endpoint | 3 requests |
 
-### Level 4: Enterprise
-- All Level 3 files
-- News namespace (`/news/*`)
-- Proof infrastructure
-- Citation tracking
-- 1-2 weeks to implement
+The optional levels are kept because they are cheap to serve once built and
+crawler behaviour changes. A site SHOULD implement Level 1 first and SHOULD
+measure (section 9) before investing in the others.
 
 ---
 
-## 9. Proof Infrastructure
+## 9. Measurement
 
-### 9.1 Crawler Hit Logging
+A site SHOULD measure which crawlers request which surfaces. Without that, no
+one can tell whether any part of this protocol is being read.
 
-Track visits from AI crawlers to measure discoverability:
+### 9.1 Crawler request logging
 
-**Tracked Crawlers:**
-- GPTBot (OpenAI)
-- ClaudeBot (Anthropic)
-- PerplexityBot (Perplexity)
-- Google-Extended (Google AI)
-- Amazonbot (Amazon)
-- Bytespider (ByteDance)
-- cohere-ai (Cohere)
-- Meta-ExternalAgent (Meta)
+For every request whose user agent matches a known AI or search crawler, log:
 
-**Implementation:**
+- the crawler name and operator;
+- the path requested, and the response status;
+- the `Accept` header, which shows whether the client asked for markdown;
+- the time.
+
+Group paths by level using the registry: markdown copies, core files
+(`robots.txt`, sitemaps), each optional endpoint, and ordinary pages.
+
 ```python
-AI_CRAWLERS = [
-    "GPTBot", "ClaudeBot", "PerplexityBot",
-    "Google-Extended", "Amazonbot", "anthropic-ai"
-]
-
-def log_crawler_hit(request):
-    user_agent = request.headers.get("User-Agent", "")
-    for crawler in AI_CRAWLERS:
-        if crawler.lower() in user_agent.lower():
-            # Log to analytics
-            track_event("adp_crawler_hit", {
-                "crawler": crawler,
-                "endpoint": request.path,
-                "timestamp": datetime.utcnow()
-            })
+def log_crawler_request(request, crawler):
+    record({
+        "crawler": crawler.name,
+        "operator": crawler.operator,
+        "path": request.path,
+        "status": response.status,
+        "accept": request.headers.get("Accept", "")[:200],
+        "time": utcnow(),
+    })
 ```
 
-### 9.2 Citation Detection
+### 9.2 Verifying the crawler
 
-Monitor when AI systems cite your content:
+A user agent is free text and is forged in practice. Where an operator
+publishes the address ranges its crawler uses, a site SHOULD check the
+request address against them and record one of three outcomes: verified,
+failed, or no published ranges. "No published ranges" MUST NOT be read as
+"fake".
 
-**Detection Methods:**
-1. **Query-based**: Search AI platforms for your brand/content
-2. **API-based**: Use Perplexity API for citation scanning
-3. **Manual verification**: Periodic spot checks
+### 9.3 Separating kinds of crawler
 
-**Metrics:**
-- Total citations per period
-- Citations by platform (ChatGPT, Perplexity, Claude)
-- Time-to-citation (publish → first cite)
-- Citation rate (citations / published content)
+Report index and training crawlers separately from fetchers that act for a
+person asking a question (for example ChatGPT-User). They behave differently,
+and only the second kind shows that content was fetched to answer someone.
 
-### 9.3 ROI Attribution
+### 9.4 Citations
 
-Connect citations back to source content:
+Whether an AI system cites a page is a separate question from whether its
+crawler fetched it. A site MAY check by asking AI systems questions and
+recording which sources they cite; see
+[docs/PROOF_INFRASTRUCTURE.md](docs/PROOF_INFRASTRUCTURE.md). A citation
+count MUST state the questions asked, the systems asked and the date.
 
-```json
-{
-  "citation": {
-    "id": "cite_123",
-    "platform": "perplexity",
-    "query": "best press release platform",
-    "citedUrl": "https://example.com/post/123",
-    "discoveredAt": "2026-01-08T12:00:00Z"
-  },
-  "attribution": {
-    "sourceContentId": "post_123",
-    "publishedAt": "2026-01-05T10:00:00Z",
-    "timeToCitation": "3 days",
-    "confidence": 0.95
-  }
-}
-```
+### 9.5 Publishing results
+
+A site MAY publish its grouped counts, as [RESULTS.md](RESULTS.md) does for
+the reference implementation, and MAY serve them at `/api/v1/adp/stats`.
 
 ---
 
@@ -857,6 +978,22 @@ Content-Type: application/json
 
 ## 11. Migration Guide
 
+### From v3.0 to v3.1
+
+v3.1 changes what is required, so a v3.0 site is not automatically a v3.1
+Level 1 site.
+
+1. **Add a markdown copy for each content page** (section 3.2).
+2. **Link each copy from its page body**, and add the head link (section 3.3).
+3. **Optionally list the copies in a sitemap** (section 3.4).
+4. **Keep or drop root files as you prefer.** `/ai-discovery.json`,
+   `/llms.txt` and `/knowledge-graph.json` are now optional. If you keep
+   `/ai-discovery.json`, set `"version": "3.1"` and add a pointer to an index
+   of your markdown copies.
+5. **Drop `/ai-sitemap.xml`** if it repeats the pages in your standard
+   sitemap.
+6. **Start logging** crawler requests by path (section 9).
+
 ### From v2.1 to v3.0
 
 1. **Update version number**
@@ -894,7 +1031,7 @@ Content-Type: application/json
 
 ### Backwards Compatibility
 
-ADP v3.0 is backwards compatible with v2.1 and v1.0:
+The optional endpoints in v3.1 keep the v3.0 formats, which were backwards compatible with v2.1 and v1.0:
 - v2.1 clients can read v3.0 responses (ignore MCP fields)
 - v3.0 servers can serve v2.1 clients (core fields unchanged)
 - MCP endpoints are optional - not required for compliance
@@ -907,7 +1044,10 @@ ADP v3.0 is backwards compatible with v2.1 and v1.0:
 - [Schema.org](https://schema.org) - Vocabulary standard
 - [JSON-LD](https://json-ld.org) - Linked data format
 - [JSON Feed](https://jsonfeed.org) - Feed format
-- [robots.txt](https://www.robotstxt.org) - Crawler directives
+- [robots.txt](https://www.rfc-editor.org/rfc/rfc9309) - Crawler directives (RFC 9309)
+- [Sitemaps](https://www.sitemaps.org/protocol.html) - Sitemap protocol
+- [llms.txt](https://llmstxt.org) - Context document format
+- [IndexNow](https://www.indexnow.org) - Change notification for search engines
 - [HTTP Caching](https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching) - Cache headers
 
 ---

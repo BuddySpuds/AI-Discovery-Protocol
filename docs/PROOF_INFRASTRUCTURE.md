@@ -1,18 +1,18 @@
 # Proof Infrastructure Documentation
 
-**ADP v2.1 Feature**
+**Optional. Supports section 9 (Measurement) of the specification.**
 
-Proof Infrastructure enables you to measure the effectiveness of your ADP implementation by tracking AI crawler visits, detecting citations, and attributing ROI to specific content.
+This document shows one way to log AI crawler requests, check whether AI systems cite your content, and match a citation to the page it came from. The code is illustrative. Measured output from the reference site is in [RESULTS.md](../RESULTS.md).
 
 ---
 
 ## Overview
 
-Implementing ADP is only valuable if you can prove it works. Proof Infrastructure provides three capabilities:
+Three capabilities:
 
 1. **Crawler Hit Logging** - Track when AI systems visit your ADP endpoints
 2. **Citation Detection** - Monitor when AI systems cite your content
-3. **ROI Attribution** - Connect citations back to source content
+3. **Attribution** - Connect citations back to source content
 
 ---
 
@@ -170,18 +170,18 @@ async def scan_for_citations(
 ) -> Dict:
     """Scan Perplexity for citations of your content"""
 
-    # Wide-net query templates (optimized for detection)
+    # Query templates, most specific first
     query_templates = [
-        # Tier 1: Direct queries (86% success rate)
+        # Tier 1: Direct queries
         {"template": f"tell me about {company_name}", "category": "direct", "priority": 1},
         {"template": f"what is {company_name}", "category": "direct", "priority": 1},
         {"template": company_name, "category": "direct", "priority": 1},
 
-        # Tier 2: News queries (40% success rate)
+        # Tier 2: News queries
         {"template": f"{company_name} announcement", "category": "news", "priority": 2},
         {"template": f"{company_name} latest news", "category": "news", "priority": 2},
 
-        # Tier 3: Generic queries (29% success rate)
+        # Tier 3: Generic queries
         {"template": f"{company_name} press release", "category": "generic", "priority": 3},
         {"template": f"recent news about {company_name}", "category": "generic", "priority": 3},
     ]
@@ -267,7 +267,7 @@ CREATE INDEX idx_citations_attributed ON ai_citations(attributed_pr_id);
 
 ---
 
-## 3. ROI Attribution
+## 3. Attribution
 
 ### Attribution Algorithm
 
@@ -329,7 +329,7 @@ async def attribute_citation_to_pr(citation: Dict, press_releases: List[Dict]) -
 
 ```python
 async def get_citation_metrics(days: int = 30) -> Dict:
-    """Calculate citation ROI metrics"""
+    """Summarise citations for one page"""
 
     # Total citations in period
     total_citations = await db.fetchval("""
@@ -536,27 +536,15 @@ jobs:
 
 ---
 
-## 6. Cost Optimization
+## 6. Cost
 
-### Perplexity API Costs
+Citation checks call a paid API once per question per system. Cost scales
+with the number of pages checked, the number of questions per page and how
+often you repeat them. Check the provider's current price list.
 
-| Volume | Monthly Cost |
-|--------|-------------|
-| 4 PRs/week | ~$5.50/month |
-| 10 PRs/week | ~$14/month |
-| 25 PRs/week | ~$35/month |
-
-**Cost Breakdown:**
-- Perplexity Sonar: $5/1K requests
-- ~8 queries per PR scan
-- Minimal token costs
-
-### Optimization Strategies
-
-1. **Batch scanning** - Scan all recent PRs once daily, not on publish
-2. **Query prioritization** - Run high-success queries first, stop early if found
-3. **Caching** - Cache negative results for 24 hours
-4. **Sampling** - For high-volume sites, sample 20% of content
+To keep it down: scan once a day rather than on publish, ask the most
+specific questions first and stop when a citation is found, and do not
+re-ask a question that returned nothing within the same day.
 
 ---
 
@@ -569,5 +557,5 @@ Live proof infrastructure at Pressonify.ai:
 
 ---
 
-*AI Discovery Protocol v2.1 - Proof Infrastructure*
+*AI Discovery Protocol v3.1 - Measurement*
 *Maintained by [Pressonify](https://pressonify.ai)*

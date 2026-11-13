@@ -1,277 +1,199 @@
-# ADP Results: Real Citation Outcomes
+# What AI crawlers read: measured results
 
-**Last Updated:** January 2026
-**Data Source:** Anonymized Pressonify.ai customer data
-**Methodology:** Perplexity API citation scanning + crawler hit logging
+**Updated:** 13 November 2026
+**Source:** request logs of [pressonify.ai](https://pressonify.ai), the reference implementation
+**Window:** 14 October to 12 November 2026 (30 days, UTC)
+**Sample:** 22,168 requests from 18 crawlers, identified by user agent
 
----
-
-## Executive Summary
-
-These are **real results** from businesses using ADP v2.1 via [Pressonify.ai](https://pressonify.ai). No simulations. No projections. Actual citations discovered in AI search results.
-
-| Metric | Result |
-|--------|--------|
-| **Average time to first AI citation** | 2.4 days |
-| **Citation detection rate** | 100% (all published PRs cited) |
-| **Most active AI platform** | Perplexity (67% of citations) |
-| **Crawler visits per month** | 1,200+ across 11 AI systems |
+This page reports what one site measured. It is one site, so read it as a
+case, not as a law. It is published because first-party logs of which crawlers
+read which discovery files are hard to find, and the protocol should follow
+them.
 
 ---
 
-## Case Studies (Anonymized)
+## Summary
 
-### Case Study 1: B2B SaaS Company
+| What was requested | Requests | Share | Crawlers |
+|---|---:|---:|---:|
+| HTML pages (articles, releases, hubs, everything else) | 15,532 | 70.1% | 18 |
+| Markdown copies of pages | 5,290 | 23.9% | 13 |
+| `robots.txt` and sitemaps | 1,019 | 4.6% | 12 |
+| Root discovery files (context files, feeds, news files, manifests) | 327 | 1.5% | 13 |
 
-**Industry:** Marketing Technology
-**Content Type:** Product launch announcement
-**ADP Implementation:** Full (20 endpoints)
+Three things follow.
 
-| Metric | Before ADP | After ADP |
-|--------|------------|-----------|
-| AI crawler visits/month | 12 | 847 |
-| Citations discovered | 0 | 36 |
-| Time to first citation | Never | 18 hours |
-| Platforms citing | 0 | 4 (Perplexity, ChatGPT, Claude, Gemini) |
+1. **Crawlers read pages.** Seven requests in ten were for ordinary HTML.
+2. **Markdown copies of pages are read. Root discovery files mostly are not.**
+   The copies drew sixteen times the requests of every root file combined.
+3. **The meta-index is not used as an entry point.** `/ai-discovery.json` was
+   requested 30 times by four crawlers. Nothing in the logs suggests a crawler
+   fetches it first and then follows it.
 
-**Key Finding:** The company's press release was cited by Perplexity within 18 hours of publication. The citation appeared in response to the query "best [category] tools 2026" — a high-intent commercial query.
-
----
-
-### Case Study 2: E-commerce Brand
-
-**Industry:** Consumer Products
-**Content Type:** Funding announcement
-**ADP Implementation:** Standard (6 endpoints)
-
-| Metric | Before ADP | After ADP |
-|--------|------------|-----------|
-| AI crawler visits/month | 3 | 234 |
-| Citations discovered | 0 | 12 |
-| Time to first citation | Never | 3 days |
-| Platforms citing | 0 | 2 (Perplexity, ChatGPT) |
-
-**Key Finding:** Direct brand queries ("tell me about [company]") returned citations to the funding announcement within 72 hours. The AI response included accurate funding amount and investor names from the structured press release.
+These findings are the reason ADP 3.1 makes page copies Level 1 and moves the
+root files to optional levels. See [SPECIFICATION.md](SPECIFICATION.md).
 
 ---
 
-### Case Study 3: Healthcare Startup
+## Root discovery files, one by one
 
-**Industry:** Digital Health
-**Content Type:** FDA approval announcement
-**ADP Implementation:** Full + News Namespace
+Requests for each path over the 30 days. Some of these paths redirect to
+another file on the reference site; the count is for the path as requested.
 
-| Metric | Before ADP | After ADP |
-|--------|------------|-----------|
-| AI crawler visits/month | 8 | 1,100+ |
-| Citations discovered | 0 | 48 |
-| Time to first citation | Never | 6 hours |
-| Platforms citing | 0 | 4 |
+| Path | Requests | Crawlers |
+|---|---:|---:|
+| `/llms.txt` | 51 | 8 |
+| `/news/changelog.json` | 36 | 4 |
+| `/ai-discovery.json` | 30 | 4 |
+| `/news/latest.json` | 27 | 2 |
+| `/llms-full.txt` | 22 | 4 |
+| `/news/archive.jsonl` | 21 | 3 |
+| `/ai-discovery.md` | 18 | 5 |
+| `/feed.json` | 18 | 3 |
+| `/updates.json` | 16 | 2 |
+| `/knowledge-graph.json` | 15 | 4 |
+| `/news/llms.txt` | 14 | 2 |
+| `/.well-known/ai.json` | 13 | 3 |
+| `/news/speakable.json` | 13 | 2 |
+| `/feed` | 11 | 4 |
+| `/wiki/llms.txt` | 9 | 4 |
+| `/opensearch.xml` | 7 | 1 |
+| `/rss.xml` | 2 | 1 |
+| `/blog-feed.xml` | 1 | 1 |
+| `/mcp.json` | 1 | 1 |
+| `/.well-known/agents.json` | 1 | 1 |
+| `/api/v1/adp/stats` | 1 | 1 |
 
-**Key Finding:** Healthcare content with proper Schema.org markup (MedicalDevice, Organization) achieved the fastest citation time in our dataset. The `/news/speakable.json` endpoint enabled voice assistant citations.
-
----
-
-## Citation Detection Methodology
-
-### How We Track Citations
-
-1. **Wide-Net Query Strategy** — 8 query templates per company, prioritized by success rate
-2. **Perplexity API Integration** — `sonar` model with `return_citations: true`
-3. **Daily Automated Scans** — 8pm GMT cron job scanning all recent content
-4. **Attribution Matching** — SHA-256 fingerprinting to match citations to source PRs
-
-### Query Templates (Ranked by Success Rate)
-
-| Priority | Template | Success Rate |
-|----------|----------|--------------|
-| 1 | `tell me about {company}` | 86% |
-| 1 | `what is {company}` | 84% |
-| 1 | `{company}` (direct) | 82% |
-| 2 | `{company} announcement` | 43% |
-| 2 | `{company} latest news` | 38% |
-| 3 | `{company} press release` | 31% |
-| 3 | `recent news about {company}` | 27% |
-
-**Key Insight:** Direct brand queries outperform news-style queries by 2-3x. Optimize your content for "What is [Company]?" queries.
+For comparison, the core files: `/robots.txt` 412, `/news-sitemap.xml` 342,
+`/sitemap.xml` 264.
 
 ---
 
-## Crawler Activity Data
+## Who reads the markdown copies
 
-### AI Crawlers Detected (30-Day Sample)
+| Crawler | Operator | Requests for copies | Share of all copy requests |
+|---|---|---:|---:|
+| Meta-ExternalAgent | Meta | 4,355 | 82.3% |
+| AhrefsBot | Ahrefs | 270 | 5.1% |
+| SemrushBot | Semrush | 224 | 4.2% |
+| Bytespider | ByteDance | 152 | 2.9% |
+| PerplexityBot | Perplexity | 73 | 1.4% |
+| YouBot | You.com | 73 | 1.4% |
+| GPTBot | OpenAI | 70 | 1.3% |
+| OAI-SearchBot | OpenAI | 39 | 0.7% |
+| Amazonbot | Amazon | 18 | 0.3% |
+| Others (DotBot, CCBot, ClaudeBot, ChatGPT-User) | | 16 | 0.3% |
 
-| Crawler | Organization | Hits | % of Total |
-|---------|--------------|------|------------|
-| GPTBot | OpenAI | 523 | 42% |
-| ClaudeBot | Anthropic | 312 | 25% |
-| PerplexityBot | Perplexity | 198 | 16% |
-| Google-Extended | Google | 145 | 12% |
-| Amazonbot | Amazon | 69 | 5% |
-
-### Most Crawled Endpoints
-
-| Endpoint | Hits | Purpose |
-|----------|------|---------|
-| `/llms.txt` | 487 | Primary context document |
-| `/knowledge-graph.json` | 342 | Entity catalog |
-| `/ai-discovery.json` | 256 | Meta-index |
-| `/feed.json` | 189 | Content updates |
-| `/news/llms.txt` | 134 | News-specific context |
-
-**Key Insight:** `/llms.txt` receives 3x more crawler traffic than any other endpoint. This is your most important ADP file.
+One crawler accounts for four fifths of the copy traffic. Without it, the
+copies would still draw about three times the requests of the root files
+(935 against 327), from twelve crawlers.
 
 ---
 
-## Time-to-Citation Analysis
+## Every crawler in the window
 
-### Distribution (n=127 PRs)
+| Crawler | Operator | All requests | HTML pages | Markdown copies | Root files | robots.txt and sitemaps |
+|---|---|---:|---:|---:|---:|---:|
+| Meta-ExternalAgent | Meta | 9,502 | 4,895 | 4,355 | 251 | 1 |
+| PerplexityBot | Perplexity | 2,867 | 2,779 | 73 | 2 | 13 |
+| Amazonbot | Amazon | 1,784 | 1,750 | 18 | 16 | 0 |
+| SemrushBot | Semrush | 1,469 | 1,227 | 224 | 6 | 12 |
+| ClaudeBot | Anthropic | 1,420 | 881 | 3 | 3 | 533 |
+| AhrefsBot | Ahrefs | 1,010 | 664 | 270 | 13 | 63 |
+| YouBot | You.com | 913 | 616 | 73 | 7 | 217 |
+| Bytespider | ByteDance | 853 | 673 | 152 | 11 | 17 |
+| CCBot | Common Crawl | 706 | 697 | 5 | 1 | 3 |
+| ChatGPT-User | OpenAI | 541 | 538 | 2 | 1 | 0 |
+| GPTBot | OpenAI | 447 | 305 | 70 | 8 | 64 |
+| OAI-SearchBot | OpenAI | 426 | 288 | 39 | 5 | 94 |
+| Sogou | Sogou | 138 | 136 | 0 | 2 | 0 |
+| DotBot | Moz | 59 | 52 | 6 | 0 | 1 |
+| cohere-ai | Cohere | 19 | 19 | 0 | 0 | 0 |
+| Bingbot | Microsoft | 11 | 10 | 0 | 1 | 0 |
+| Googlebot | Google | 2 | 1 | 0 | 0 | 1 |
+| Claude-User | Anthropic | 1 | 1 | 0 | 0 | 0 |
 
-| Time Range | % of PRs | Cumulative |
-|------------|----------|------------|
-| < 24 hours | 23% | 23% |
-| 1-3 days | 45% | 68% |
-| 3-7 days | 27% | 95% |
-| 7-14 days | 5% | 100% |
-
-**Median time to first citation: 2.4 days**
-
-### Factors Affecting Citation Speed
-
-| Factor | Impact |
-|--------|--------|
-| Full ADP implementation (20 endpoints) | -40% time |
-| News namespace included | -25% time |
-| Schema.org NewsArticle markup | -20% time |
-| Speakable content | -15% time |
-| IndexNow notification | -10% time |
-
----
-
-## Platform Comparison
-
-### Citation Distribution by AI Platform
-
-```
-Perplexity    ████████████████████████████████████  67%
-ChatGPT       ██████████████████                    18%
-Claude        ████████                               8%
-Gemini        ██████                                 6%
-Other         █                                      1%
-```
-
-### Why Perplexity Dominates
-
-1. **Real-time web search** — Perplexity crawls content daily
-2. **Citation transparency** — Shows sources in responses
-3. **API access** — Enables programmatic citation detection
-4. **News focus** — Optimized for current events and announcements
+**Fetchers that act for a person asking a question read pages.**
+ChatGPT-User made 541 requests: 538 for HTML pages, 2 for markdown copies and
+1 for a root file. The other requests in the table come from crawlers that
+build an index or a training corpus.
 
 ---
 
-## ROI Framework
+## How the markdown copies came to be read
 
-### Citation Value Estimation
+The copies went live on the reference site on 7 July 2026.
 
-| Traffic Source | Est. Value/Visit | Citation Equivalent |
-|----------------|------------------|---------------------|
-| Google Organic | $2.50 | 1 citation ≈ 50-200 visits |
-| Paid Search | $5.00 | 1 citation ≈ 25-100 visits |
-| AI Citation | $15.00+ | High-intent, pre-qualified |
+| Date | State of the site | Markdown copies as a share of crawler requests |
+|---|---|---:|
+| Up to 7 July 2026 | Root discovery files only | No copies yet. Root files: 0.75% of 142,458 requests since logging began |
+| 11 July 2026 | Copies live for four days, announced in the page head only | 4.0% (241 of 6,018) |
+| 11 July 2026 | Visible body link added to each page; copies added to the sitemap | |
+| 9 August 2026 | 30 days later | 17.3% (5,383 of 31,176) |
+| 24 September 2026 | Copies moved out of the main sitemap into a dedicated one that `robots.txt` does not name. Body links unchanged | |
+| 12 November 2026 | This report | 23.9% (5,290 of 22,168) |
 
-**Why AI citations are worth more:**
-- Users asking AI have **purchase intent** (not just browsing)
-- AI pre-qualifies your business as relevant to their query
-- No click required for brand awareness (AI reads your content aloud)
-- Compounds over time (AI learns your content)
+Crawlers found the copies within days once pages pointed at them, and the
+share grew after the copies were linked from the page body and listed in the
+sitemap. Those changes were made together, so July alone cannot separate them.
 
-### Customer LTV Impact (Early Data)
+September can. On 24 September the copies were taken out of the main sitemap
+(they are marked `noindex`, and listing them there drew search-console
+warnings). They stayed linked from each page body.
 
-| Acquisition Source | Avg. Deal Size | Close Rate |
-|--------------------|----------------|------------|
-| Google Organic | $2,400 | 12% |
-| Paid Ads | $1,800 | 8% |
-| AI Citation Referral | $4,200 | 24% |
+- In the six full weeks before the move the copies drew between 17.5% and
+  21.8% of crawler requests each week (15.8% in the week of the move). In
+  the seven weeks after, between 22.0% and 30.2%.
+- 18 copies that had never been requested before the move were requested
+  after it, by ten crawlers including PerplexityBot, ClaudeBot, GPTBot and
+  OAI-SearchBot.
+- The dedicated sitemap was requested 31 times in the report window, by two
+  crawlers (GPTBot and Meta-ExternalAgent).
 
-*Note: Early data from 3 B2B customers tracking source attribution. Sample size limited.*
-
----
-
-## Competitive Landscape
-
-### PR Platform AI-Readiness (December 2025)
-
-| Platform | /llms.txt | /.well-known/ai.json | Crawler Tracking | Citation Detection |
-|----------|-----------|----------------------|------------------|-------------------|
-| PR Newswire | 404 | 404 | No | No |
-| PRWeb | 404 | 404 | No | No |
-| BusinessWire | 404 | 404 | No | No |
-| GlobeNewswire | 404 | 404 | No | No |
-| **Pressonify** | **200** | **200** | **Yes** | **Yes** |
-
-**Conclusion:** Major PR platforms have zero AI discoverability infrastructure. Content published through them is invisible to AI search.
+The body link carries discovery. Level 1 therefore requires the body link and
+only recommends a sitemap listing and the head link.
 
 ---
 
-## Get These Results
+## What this does not show
 
-### Option 1: DIY Implementation
-
-Implement ADP yourself using this open specification:
-- [SPECIFICATION.md](SPECIFICATION.md) — Complete protocol spec
-- [QUICK_START.md](QUICK_START.md) — Implementation guide
-- [examples/](examples/) — Code templates
-
-**Time investment:** 2-4 hours (Standard), 1-2 weeks (Enterprise with citation tracking)
-
-### Option 2: Pressonify (Done-For-You)
-
-Get ADP implementation + citation tracking + results like these:
-
-🚀 **[Try Pressonify Free →](https://pressonify.ai/generate?free=1)**
-
-**What you get:**
-- Full 20-endpoint ADP implementation
-- Automatic Schema.org markup
-- Citation tracking dashboard
-- Daily citation reports
-- IndexNow instant indexing
-- AI-optimized press releases in 60 seconds
-
-**Pricing:** Starting at €49/PR | [View Plans →](https://pressonify.ai/pricing)
+- **It does not show that anything here earns a citation.** These are
+  requests, not citations. A crawler reading a file is necessary for that file
+  to matter and is not evidence that it does.
+- **It is one site.** A site with different content, age or traffic may see a
+  different mix.
+- **Crawlers are identified by user agent.** A user agent is free text and can
+  be forged. The reference site began checking crawler addresses against the
+  operators' published ranges on 12 November 2026; this window predates that.
+- **Most of the copy traffic is one crawler.** If Meta-ExternalAgent changes
+  its behaviour, the headline share changes with it.
+- **Requests are not reading.** A fetch says nothing about what was done with
+  the content.
 
 ---
 
-## Data Transparency
+## Method
 
-### How This Data Was Collected
+Every request whose user agent matches a known AI or search crawler is logged
+with its path. For this report each request was put in one class:
 
-1. **Crawler hits** — Server-side logging with user-agent identification
-2. **Citations** — Perplexity API scans with `return_citations: true`
-3. **Attribution** — URL matching + headline similarity scoring
-4. **Anonymization** — Company names removed, industries generalized
+- **Markdown copies:** paths under `/okf/`, where the reference site serves
+  its copies.
+- **robots.txt and sitemaps:** `/robots.txt`, `/sitemap.xml`,
+  `/news-sitemap.xml`, `/sitemap-ai.xml`.
+- **Root discovery files:** the paths in the table above.
+- **HTML pages:** everything else.
 
-### Limitations
-
-- Citation detection limited to Perplexity (API access)
-- ChatGPT/Claude/Gemini citations detected via manual spot-checks
-- Sample size: 127 press releases, 14 companies, 6-month period
-- Results may vary based on industry, content quality, and timing
-
-### Updates
-
-This page is updated monthly with fresh data. Last update: January 2026.
+To run the same measurement on your own site, log the user agent and path of
+each request and group the paths the same way. The
+[registry](registry/adp-registry.json) lists the paths to group.
 
 ---
 
-## Questions?
+## Withdrawn figures
 
-- **Technical:** [GitHub Issues](https://github.com/BuddySpuds/AI-Discovery-Protocol/issues)
-- **Implementation help:** [ai-discovery@pressonify.ai](mailto:ai-discovery@pressonify.ai)
-- **Enterprise inquiries:** [enterprise@pressonify.ai](mailto:enterprise@pressonify.ai)
-
----
-
-*Results documented by [Pressonify.ai](https://pressonify.ai) — The closed-loop citation platform*
-
-*Publish → Index → Cite → Detect*
+Earlier versions of this page reported a 2.4 day average time to first
+citation, a 100% citation rate, three anonymised case studies, per-query
+success rates and referral revenue comparisons. They are withdrawn because
+they cannot be substantiated. Nothing on this page replaces them with a
+citation claim.
