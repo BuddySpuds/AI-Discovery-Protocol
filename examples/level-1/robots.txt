@@ -1,0 +1,9 @@
+# Example Corporation
+# One group, no blank or comment lines inside it, Disallow before the broad Allow.
+# Older parsers end a group at a blank line and take the first matching rule.
+User-agent: *
+Disallow: /admin/
+Disallow: /dashboard/
+Allow: /
+
+Sitemap: https://example.com/sitemap.xml

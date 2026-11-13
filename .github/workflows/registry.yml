@@ -1,0 +1,17 @@
+name: Registry
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Registry is valid and the documents match it
+        run: python scripts/render_registry.py --check

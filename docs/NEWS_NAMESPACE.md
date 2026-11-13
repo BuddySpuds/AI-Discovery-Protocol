@@ -1,6 +1,6 @@
 # News Namespace Documentation
 
-**ADP v2.1 Feature**
+**Optional (Level 3)**
 
 The `/news/` namespace provides specialized endpoints for news publishers, press release platforms, and content sites that need to optimize their news content for AI discovery.
 
@@ -159,8 +159,7 @@ Platform version history and updates. Useful for AI systems tracking when featur
       "type": "feature",
       "changes": [
         "Implemented wide-net query strategy for citation detection",
-        "Added daily citation report at 8pm GMT",
-        "Query success rate improved from 13% to 48%"
+        "Added daily citation report at 8pm GMT"
       ]
     },
     {

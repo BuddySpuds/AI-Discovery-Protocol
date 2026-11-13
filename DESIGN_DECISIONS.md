@@ -4,6 +4,12 @@
 **Date:** November 2, 2025
 **Author:** Robert Porter (with Claude, Anthropic)
 
+> **Historical document.** This records the reasoning behind ADP 1.0, written in
+> November 2025 before any crawler data existed. Version 3.1 reverses its
+> central decision, the single entry point, on the evidence in
+> [RESULTS.md](RESULTS.md). The adoption figures quoted below were not sourced
+> at the time and have been removed.
+
 ---
 
 ## Executive Summary
@@ -24,7 +30,7 @@ This document explains the **architectural decisions** behind the AI Discovery P
 - **RSS** (1999): Straightforward feed format → Billions of feeds
 
 **Failed/struggling standards (complex but powerful):**
-- **WCAG 2.1**: 95.9% non-compliance (too complex)
+- **WCAG 2.1**: widely unmet in practice
 - **llms.txt** (2024): Major AI platforms DON'T support it yet
 - **Semantic Web/RDF**: Never achieved mass adoption (too complex)
 
@@ -670,9 +676,7 @@ By learning from successful standards (robots.txt, RSS, sitemap.xml) and avoidin
 - **llms.txt Status**: Proposed Sept 2024, 70+ early adopters, major platforms not yet supporting
 
 ### Adoption Studies
-- **WCAG 2.1 Compliance**: 95.9% failure rate (2024) due to complexity
-- **Schema.org Adoption**: ~40% of websites (success through simplicity)
-- **Semantic Web/RDF**: <1% adoption (failure due to complexity)
+- WCAG 2.1, Schema.org and Semantic Web/RDF adoption, compared informally
 
 ### Technical Resources
 - **JSON-LD 1.1 W3C Recommendation**: https://www.w3.org/TR/json-ld11/
